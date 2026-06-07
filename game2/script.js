@@ -193,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isPlaying = false;
   let selectedCandy = null;
   let isSwappingOrFalling = false;
+  let endlessMode = false;
 
   // 0 to 5 are basic candies. 6 is Lightning (⚡), 7 is Rainbow Color Bomb (🌈)
   const CANDIES_EMOJIS = ['🍬', '🍭', '🍪', '🍩', '🧁', '🍓', '⚡', '🌈'];
@@ -270,6 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     moves = 30;
     selectedCandy = null;
     isSwappingOrFalling = false;
+    endlessMode = false;
 
     scoreVal.innerText = '0';
     movesVal.innerText = '30';
@@ -401,8 +403,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (candy.value === 6) {
       // Direct click Lightning Candy
       isSwappingOrFalling = true;
-      moves--;
-      movesVal.innerText = moves;
+      if (!endlessMode) {
+        moves--;
+        movesVal.innerText = moves;
+      } else {
+        movesVal.innerText = "∞";
+      }
       const blastSet = new Set();
       collectLineBlast(candy.row, candy.col, blastSet);
       executeLineBlast(blastSet, candy.row, candy.col);
@@ -411,8 +417,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (candy.value === 7) {
       // Direct click Color Bomb
       isSwappingOrFalling = true;
-      moves--;
-      movesVal.innerText = moves;
+      if (!endlessMode) {
+        moves--;
+        movesVal.innerText = moves;
+      } else {
+        movesVal.innerText = "∞";
+      }
       
       const boardValues = [];
       for (let r = 0; r < boardSize; r++) {
@@ -474,8 +484,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const matches = findMatches();
 
       if (matches.length > 0 || isSpecial1 || isSpecial2) {
-        moves--;
-        movesVal.innerText = moves;
+        if (!endlessMode) {
+          moves--;
+          movesVal.innerText = moves;
+        } else {
+          movesVal.innerText = "∞";
+        }
 
         if (isSpecial1 || isSpecial2) {
           triggerSpecialSwap(candy1, candy2, matches);
@@ -605,7 +619,7 @@ document.addEventListener('DOMContentLoaded', () => {
     scoreVal.innerText = score;
 
     setTimeout(() => {
-      if (score >= targetScore) {
+      if (!endlessMode && score >= targetScore) {
         triggerVictory();
         return;
       }
@@ -654,7 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
       playMatchChime(list.length);
 
       setTimeout(() => {
-        if (score >= targetScore) {
+        if (!endlessMode && score >= targetScore) {
           triggerVictory();
           return;
         }
@@ -740,7 +754,7 @@ document.addEventListener('DOMContentLoaded', () => {
       scoreVal.innerText = score;
 
       setTimeout(() => {
-        if (score >= targetScore) {
+        if (!endlessMode && score >= targetScore) {
           triggerVictory();
           return;
         }
@@ -904,7 +918,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playMatchChime(finalMatches.length);
 
     setTimeout(() => {
-      if (score >= targetScore) {
+      if (!endlessMode && score >= targetScore) {
         triggerVictory();
         return;
       }
@@ -950,7 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         isSwappingOrFalling = false;
         
-        if (moves <= 0 && score < targetScore) {
+        if (!endlessMode && moves <= 0 && score < targetScore) {
           isPlaying = false;
           stopBgm();
           setTimeout(() => {
@@ -1289,10 +1303,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // ——————————————————————————————————————————————————————
   // 11. CONTROLS AND BGM MUSIC SWITCH
   // ——————————————————————————————————————————————————————
+  const btnContinue = document.getElementById('btn-continue-game');
+
   setupButton(btnStart, startGame);
   setupButton(btnRestartHud, startGame);
   setupButton(btnReplay, startGame);
   setupButton(btnHint, triggerHint);
+  setupButton(btnContinue, () => {
+    endlessMode = true;
+    isPlaying = true;
+    movesVal.innerText = "∞";
+    victoryScreen.classList.add('hidden');
+    startBgm();
+  });
   setupButton(btnMusicToggle, () => {
     if (audioCtx.state === 'suspended') {
       audioCtx.resume();

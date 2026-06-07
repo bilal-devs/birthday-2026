@@ -188,8 +188,8 @@ body, html {
 
 .board-container {
   position: relative;
-  width: min(460px, 94vw);
-  height: min(460px, 94vw);
+  width: min(500px, 95vw);
+  height: min(500px, 95vw);
   background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -690,8 +690,8 @@ body, html {
   }
 
   .board-container {
-    width: min(370px, 94vw);
-    height: min(370px, 94vw);
+    width: min(410px, 96vw);
+    height: min(410px, 96vw);
     padding: 5px;
     border-radius: 10px;
   }

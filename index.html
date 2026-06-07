@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday & A Surprise Surprise</title>
+  <meta name="description"
+    content="A deeply personalized cherry blossom birthday and engagement landing page. Created with love.">
+  <meta name="theme-color" content="#FFB7C5">
+
+  <!-- Favicon and App Icons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="assets/favicon_io/site.webmanifest">
+  <link rel="shortcut icon" href="assets/favicon_io/favicon.ico">
+
+  <!-- Style links -->
+  <link rel="stylesheet" href="style.css?v=3.0">
+</head>
+
+<body>
+
+  <!-- Background Textured Paint/Parchment layer -->
+  <div class="parchment-bg"></div>
+
+  <!-- Petals will fall here once the envelope is opened -->
+  <div class="petal-container" id="petal-container"></div>
+
+  <!-- ========================================================
+       💌 1. INTERACTIVE OPENING ENVELOPE SCREEN
+       This blocks the page load until clicked. When the pink
+       wax seal is clicked, it breaks, plays the user's music,
+       unlocks scrolling, and starts the petal shower!
+       ======================================================== -->
+  <div class="envelope-screen" id="envelope-screen">
+    <!-- Corner branches that frame the screen elegantly -->
+    <img src="assets/cherry-branch.png" class="bloom-accent top-right" style="opacity: 0.35; z-index: 1;" alt=""
+      aria-hidden="true">
+    <img src="assets/cherry-branch.png" class="bloom-accent top-left"
+      style="opacity: 0.35; z-index: 1; transform: scaleX(-1);" alt="" aria-hidden="true">
+    <img src="assets/bouquet.png" class="bloom-accent bottom-left" style="opacity: 0.25; z-index: 1;" alt=""
+      aria-hidden="true">
+
+    <!-- Ambient glowing sparkles -->
+    <div class="sparkle-ambient" style="top: 15%; left: 20%; animation-delay: 0s;"></div>
+    <div class="sparkle-ambient" style="top: 30%; left: 80%; animation-delay: 1.5s;"></div>
+    <div class="sparkle-ambient" style="top: 75%; left: 15%; animation-delay: 0.8s;"></div>
+    <div class="sparkle-ambient" style="top: 80%; left: 70%; animation-delay: 2.2s;"></div>
+
+    <!-- Cute handwritten prompt -->
+    <h2 class="envelope-prompt">A special surprise is waiting inside...</h2>
+
+    <!-- Scrapbook Envelope -->
+    <div class="envelope-wrapper" id="envelope-wrapper">
+      <!-- Folding top flap -->
+      <div class="flap-top"></div>
+
+      <!-- The main envelope body -->
+      <div class="envelope">
+        <!-- Lace interior patterns -->
+        <div class="envelope-inside"></div>
+
+        <!-- The physical paper letter tucked inside that slides up -->
+        <div class="envelope-letter">
+          <div class="envelope-letter-heart">💖</div>
+          <div class="envelope-letter-text">A special letter for you...</div>
+        </div>
+
+        <!-- Stationary bottom and side flaps overlay -->
+        <div class="flap-bottom"></div>
+
+        <!-- Wax Seal button -->
+        <div class="wax-seal" id="wax-seal" title="Click to break the seal and open the letter"></div>
+      </div>
+    </div>
+
+    <!-- Elegant Glassmorphic helper instruction badge -->
+    <div class="envelope-helper-badge">
+      <span>Click on the Wax Seal to open</span>
+    </div>
+
+    <!-- Breathtaking Handwritten Greeting Card Modal -->
+    <div class="letter-modal" id="letter-modal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-card">
+        <!-- Torn Washi Tapes on top corners -->
+        <div class="washi-tape washi-tape-modal-left"></div>
+        <div class="washi-tape washi-tape-modal-right"></div>
+
+        <div class="modal-flower">🌸</div>
+
+        <h3 class="modal-title">For You, My Love</h3>
+
+        <div class="modal-body">
+          <p>Today is a very special day—the day the world grew brighter and more beautiful because you were born.</p>
+          <p>I have built this magical digital scrapbook for you, filled with secret blessings, sweet wishes, and lovely
+            surprises.</p>
+          <p>I hope it makes your heart flutter and brings the biggest smile to your beautiful face. Let's walk down
+            memory lane together...</p>
+        </div>
+
+        <button class="btn-modal-enter" id="btn-modal-enter" title="Click to enter the scrapbook">
+          <span>Walk Down Memory Lane 🌸</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       🌸 2. PREMIUM GLASS NAVIGATION BAR
+       Appears smoothly once envelope is opened.
+       ======================================================== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">A Special Surprise</div>
+    <div class="nav-recipient">for Laiba</div>
+    <ul class="nav-links">
+      <li><a href="#hero" class="nav-link">Home</a></li>
+      <li><a href="#letter" class="nav-link">My Message</a></li>
+      <li><a href="#memories" class="nav-link">Memories</a></li>
+      <li><a href="#scratch-game" class="nav-link">A Blessing</a></li>
+      <li><a href="#birthday-cake-section" class="nav-link">Make a Wish</a></li>
+      <li><a href="/game/index.html" target="_blank" class="nav-link" style="color: var(--rose-primary); font-weight: 700; border-bottom: 2px dashed var(--rose-primary);">Game 1: 2048 🍭</a></li>
+      <li><a href="/game2/index.html" target="_blank" class="nav-link" style="color: var(--rose-primary); font-weight: 700; border-bottom: 2px dashed var(--rose-primary);">Game 2: Candy Match 🍬</a></li>
+      <li><a href="/game3/index.html" target="_blank" class="nav-link" style="color: var(--rose-primary); font-weight: 700; border-bottom: 2px dashed var(--rose-primary);">Game 3: Memory Match 🃏</a></li>
+      <li><a href="/game4/index.html" target="_blank" class="nav-link" style="color: var(--rose-primary); font-weight: 700; border-bottom: 2px dashed var(--rose-primary);">Game 4: Flappy Cupcake 🧁</a></li>
+    </ul>
+  </nav>
+
+  <!-- ========================================================
+       🌸 3. DREAMY HERO WELCOME SECTION
+       Fades in with curved branch corner styling
+       ======================================================== -->
+  <header class="hero-section" id="hero">
+    <!-- Corner branches that bloom on hover -->
+    <img src="assets/cherry-branch.png" class="bloom-accent top-right" alt="" aria-hidden="true">
+    <img src="assets/cherry-branch.png" class="bloom-accent top-left" alt="" aria-hidden="true"
+      style="top: 0; left: 0; transform: scaleX(-1);">
+
+    <div class="hero-card scroll-reveal">
+      <!-- Scrapbook Tapes on Corners (Upgraded to realistic torn-edge washi tapes) -->
+      <div class="washi-tape washi-tape-left"></div>
+      <div class="washi-tape washi-tape-right"></div>
+
+      <div class="hero-emoji">🎂</div>
+
+      <!-- ✏️ CUSTOMIZE: Sweet initial greeting -->
+      <h1 class="hero-title">Happy Birthday, My Love</h1>
+
+      <!-- ✏️ CUSTOMIZE: Soft, heartfelt subtitle -->
+      <p class="hero-subtitle">
+        A beautiful digital surprise floating in time, dedicated to the sweetest person I know, and the bright future
+        we are building together.
+      </p>
+
+      <!-- ✏️ CUSTOMIZE: Change date and description -->
+      <div class="hero-date-badge">
+        <span>17th June</span>
+        <span class="badge-separator">·</span>
+        <span>The Day The World Grew Brighter</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Visual transition horizontal watercolor garland divider -->
+  <img src="assets/garland.png" class="garland-divider scroll-reveal" alt="" aria-hidden="true">
+
+  <!-- ========================================================
+       🌸 5. THE DEEP MESSAGE LETTER CONTAINER
+       Frosted paper design with tape detailing & elegant Nastaliq
+       ======================================================== -->
+  <section class="scroll-reveal" id="letter" style="padding: 2rem 1rem;">
+    <!-- Double-taped premium glass paper container -->
+    <div class="deep-letter-container">
+      <!-- Scrapbook Tapes (Upgraded to realistic torn-edge washi tapes) -->
+      <div class="washi-tape washi-tape-letter-left"></div>
+      <div class="washi-tape washi-tape-letter-right"></div>
+
+      <!-- ✏️ CUSTOMIZE: Letter salutation — styled cute and affectionate -->
+      <h3 class="letter-header">Meri Piyari Laiba,</h3>
+
+      <div class="letter-body">
+        <!-- ✏️ CUSTOMIZE: Warm, personal message capturing a pure 'I love you, you like me' vibe -->
+        <p>
+          Some people just make the world feel safe and bright the moment they step into your day. To me, you are
+          exactly that light. Every time we talk, every time you smile, all the noise of the world just fades away.
+        </p>
+
+        <!-- ✏️ CUSTOMIZE: Beautiful, cute Urdu birthday wish -->
+        <span class="urdu-text">
+          تم میری زندگی کا سب سے خوبصورت اور دل کے سب سے قریب احساس ہو۔ تمہاری ہنسی میری دنیا میں بہار کی طرح ہے۔ سالگرہ
+          بہت بہت مبارک ہو! 🌸💖
+        </span>
+
+        <p>
+          I created this special surprise space just to bring a smile to your face on your special day. I love how we
+          can share everything, laugh at the smallest things, and just be completely ourselves. Having you in my life is
+          my favorite blessing.
+        </p>
+
+        <!-- ✏️ CUSTOMIZE: Sign off name -->
+        <div class="letter-footer">With all my love & cherry blossoms</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visual transition horizontal watercolor garland divider -->
+  <img src="assets/garland.png" class="garland-divider scroll-reveal" alt="" aria-hidden="true">
+
+  <!-- ========================================================
+       🌸 NEW: PORTFOLIO MEMORIES scrapbooking polaroid gallery
+       ======================================================== -->
+  <section class="scroll-reveal" id="memories" style="padding: 3rem 1rem; text-align: center;">
+    <h2 style="font-family: 'Dancing Script', cursive; font-size: 2.8rem; color: var(--rose-dark); margin-bottom: 0.5rem;">
+      Memory Lane
+    </h2>
+    <p style="font-size: 1rem; color: #864e5a; margin-bottom: 2.5rem; font-weight: 500;">
+      Click on each polaroid card to flip it and reveal a sweet memory... 🌸
+    </p>
+    
+    <div class="memories-grid">
+      <!-- Card 1: Childhood memory -->
+      <div class="polaroid-card">
+        <div class="polaroid-inner">
+          <div class="polaroid-front">
+            <div class="polaroid-tape"></div>
+            <div class="washi-tape washi-tape-left"></div>
+            <div class="washi-tape washi-tape-right"></div>
+            <div class="polaroid-img-frame">
+              <img src="assets/laiba-child.jpg" alt="Laiba Childhood Photo">
+            </div>
+            <div class="polaroid-caption">June 17th ✨</div>
+          </div>
+          <div class="polaroid-back">
+            <div class="polaroid-note">
+              "Today is the day the world grew brighter because you were born, bringing endless light, warmth, and beautiful smiles to everyone. Saalgirah Mubarak, my sweet girl!"
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Card 2: Love message -->
+      <div class="polaroid-card">
+        <div class="polaroid-inner">
+          <div class="polaroid-front">
+            <div class="polaroid-tape" style="background: rgba(255, 183, 197, 0.45);"></div>
+            <div class="washi-tape washi-tape-left" style="background-color: rgba(252, 225, 206, 0.55);"></div>
+            <div class="washi-tape washi-tape-right" style="background-color: rgba(206, 234, 204, 0.45);"></div>
+            <div class="polaroid-img-frame">
+              <img src="assets/love-letter.png" alt="Love Letter Cherry Blossoms">
+            </div>
+            <div class="polaroid-caption">Heartfelt Notes 🌸</div>
+          </div>
+          <div class="polaroid-back">
+            <div class="polaroid-note">
+              "Every conversation we share, every time you smile, and all the sweet jokes we laugh at are forever saved in my heart. Being with you is my absolute favorite blessing."
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Card 3: Sweet wishes -->
+      <div class="polaroid-card">
+        <div class="polaroid-inner">
+          <div class="polaroid-front">
+            <div class="polaroid-tape" style="background: rgba(252, 225, 206, 0.55);"></div>
+            <div class="washi-tape washi-tape-left" style="background-color: rgba(206, 234, 204, 0.45);"></div>
+            <div class="washi-tape washi-tape-right" style="background-color: rgba(255, 183, 197, 0.55);"></div>
+            <div class="polaroid-img-frame">
+              <img src="assets/bouquet.png" alt="Beautiful Flowers Bouquet">
+            </div>
+            <div class="polaroid-caption">Sweet Wishes 💖</div>
+          </div>
+          <div class="polaroid-back">
+            <div class="polaroid-note">
+              "I wish you a lifetime of happiness, safe paths, cherry blossom days, and endless dreams fulfilled. I promise to always stand by you. Happy Birthday, my love!"
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visual transition horizontal watercolor garland divider -->
+  <img src="assets/garland.png" class="garland-divider scroll-reveal" alt="" aria-hidden="true">
+
+  <!-- ========================================================
+       🌸 OPTIONAL CUSTOMIZATION NOTE (PREVIOUS ROMANTIC TEXTS):
+       If you want to swap the scratch card texts back to the more romantic version, 
+       simply copy the values below and paste them into the active slots below!
+       
+       [Scratch Card Title]: A Secret Promise
+       [Scratch Helper Prompt]: Rub your screen or drag your mouse over the card below... 🌸✨
+       [Ticket Header]: ✨ Coupon of Commitment ✨
+       [Ticket Title]: The Forever favor
+       [Ticket Promise]: "I promise to always hold your hand, listen to all your late-night stories, make you laugh, and be your safest, happiest sanctuary. Happy Birthday, my absolute favorite blessing! 💕"
+       ======================================================== -->
+
+  <!-- ========================================================
+       🌸 INTERACTIVE SURPRISE: THE SCRATCH-OFF PROMISE TICKET
+       Contains a sparkling rose-gold coating on a canvas.
+       She scratches it off dynamically to reveal a custom promise!
+       ======================================================== -->
+  <section class="scroll-reveal" id="scratch-game" style="padding: 2rem 1rem;">
+    <div class="scratch-card-container">
+      <h2
+        style="font-family: 'Dancing Script', cursive; font-size: 2.6rem; color: var(--rose-dark); margin-bottom: 0.5rem;">
+        A Birthday Blessing
+      </h2>
+      <p id="scratch-prompt" class="scratch-prompt">
+        Rub your screen or drag your mouse over the card below to reveal a special blessing...
+      </p>
+
+      <!-- The Scratch Layer Viewport -->
+      <div class="scratch-area" id="scratch-area">
+
+        <!-- Canvas overlay (coating) -->
+        <canvas id="scratch-canvas" class="scratch-canvas"></canvas>
+
+        <!-- Hidden Romantic Ticket inside -->
+        <div class="scratch-ticket">
+          <div class="ticket-header">Birthday Blessing</div>
+
+          <!-- Watercolor heart decorative illustration -->
+          <img src="assets/heart-blossom.png" alt="" class="camera-decor-img"
+            style="width: 48px; margin-bottom: 0.4rem;" aria-hidden="true">
+
+          <!-- Custom Valentine's style romantic ticket title -->
+          <h4 class="ticket-title">The Golden Blessing</h4>
+
+          <!-- Your personalized romantic custom promise -->
+          <p class="ticket-promise">
+            "I wish you a year filled with infinite smiles, beautiful cherry blossom days, and all the happiness your
+            heart can hold. May all your paths be safe, happy, and bright! Happy Birthday!"
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Visual transition horizontal watercolor garland divider -->
+  <img src="assets/garland.png" class="garland-divider scroll-reveal" alt="" aria-hidden="true">
+
+  <!-- ========================================================
+       🎂 6. INTERACTIVE SURPRISE: THE BIRTHDAY CAKE & WISHES
+       Features an interactive CSS cake with blowable candles!
+       Tap the candles to blow them out and make a wish!
+       ======================================================== -->
+  <section class="scroll-reveal" id="birthday-cake-section" style="padding: 3rem 1rem; text-align: center;">
+    <!-- Corners decoration blooms -->
+    <img src="assets/bouquet.png" class="bloom-accent bottom-left" alt="" aria-hidden="true">
+
+    <div class="cake-container">
+      <h2
+        style="font-family: 'Dancing Script', cursive; font-size: 2.6rem; color: var(--rose-dark); margin-bottom: 0.5rem;">
+        Make a Birthday Wish
+      </h2>
+      <p style="font-size: 1rem; color: #864e5a; margin-bottom: 2rem; font-weight: 500;">
+        Blow into your microphone or tap on each candle to make your secret wish...
+      </p>
+
+      <!-- Blowing Controls (Upgraded to interactive Web Audio microphone analyser) -->
+      <div class="mic-controls" style="margin: 1.5rem 0;">
+        <button id="blow-btn" class="btn-proposal"
+          style="padding: 0.8rem 1.8rem; font-size: 0.95rem; margin-bottom: 0.5rem;">
+          <span>🌸 Tap to Blow the Candles</span>
+        </button>
+
+        <!-- Live decibel blow meter progress bar -->
+        <div id="mic-meter-container"
+          style="display: none; width: min(280px, 80vw); height: 10px; background: rgba(134, 78, 90, 0.12); border-radius: 5px; margin: 1rem auto; overflow: hidden; border: 1px solid rgba(255, 183, 197, 0.25);">
+          <div id="mic-meter-fill"
+            style="width: 0%; height: 100%; background: linear-gradient(to right, var(--rose-primary), #FF7B97); transition: width 0.08s ease;">
+          </div>
+        </div>
+
+        <div id="mic-status"
+          style="font-size: 0.95rem; font-weight: 600; color: #864e5a; transition: all 0.3s; margin-top: 0.5rem;">
+          Or just tap on each candle to blow them out manually! 🌸
+        </div>
+      </div>
+
+      <!-- The CSS Birthday Cake -->
+      <div class="cake-wrapper">
+        <div class="cake">
+          <div class="cake-layer layer-bottom">
+            <!-- Heart Sprinkles -->
+            <div class="sprinkle" style="left: 15%; top: 30%;">💖</div>
+            <div class="sprinkle" style="left: 45%; top: 40%;">💛</div>
+            <div class="sprinkle" style="left: 75%; top: 25%;">💖</div>
+          </div>
+          <div class="cake-layer layer-middle">
+            <!-- Heart Sprinkles -->
+            <div class="sprinkle" style="left: 20%; top: 25%;">✨</div>
+            <div class="sprinkle" style="left: 55%; top: 35%;">💖</div>
+            <div class="sprinkle" style="left: 80%; top: 20%;">✨</div>
+          </div>
+          <div class="cake-layer layer-top">
+            <!-- Heart Sprinkles -->
+            <div class="sprinkle" style="left: 30%; top: 20%;">💖</div>
+            <div class="sprinkle" style="left: 70%; top: 30%;">💖</div>
+          </div>
+          <div class="icing"></div>
+          <div class="drips">
+            <div class="drip"></div>
+            <div class="drip"></div>
+            <div class="drip"></div>
+            <div class="drip"></div>
+            <div class="drip"></div>
+          </div>
+
+          <!-- 3 Candles -->
+          <div class="candles-container">
+            <div class="candle" id="candle-1" data-blown="false" style="left: 35%;">
+              <div class="candle-stick"></div>
+              <div class="flame"></div>
+            </div>
+            <div class="candle" id="candle-2" data-blown="false" style="left: 50%;">
+              <div class="candle-stick"></div>
+              <div class="flame"></div>
+            </div>
+            <div class="candle" id="candle-3" data-blown="false" style="left: 65%;">
+              <div class="candle-stick"></div>
+              <div class="flame"></div>
+            </div>
+          </div>
+        </div>
+        <div class="cake-plate"></div>
+      </div>
+
+      <!-- Surprise Blessing Card (Revealed after candles are blown) -->
+      <div class="cake-surprise-card" id="cake-surprise-card">
+        <div class="surprise-badge">Wish Granted!</div>
+        <h4
+          style="font-family: 'Dancing Script', cursive; font-weight: 700; font-size: 2.3rem; color: var(--rose-deep); margin: 0.8rem 0 0.5rem;">
+          Happy Birthday!
+        </h4>
+        <p
+          style="font-family: 'Dancing Script', cursive; font-size: 1.45rem; color: var(--soft-charcoal); line-height: 1.6; padding: 0 1rem;">
+          "May your life be as bright as these candles, as sweet as this cake, and filled with infinite beautiful
+          moments. May all your secret wishes blossom!"
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       🌸 7. ROTATING MUSIC VINYL PLAYER WIDGET
+       Contains user-uploaded romantic melody playing indicator
+       ======================================================== -->
+  <div class="music-player-widget" id="music-player-widget">
+    <!-- Bubble floating status (now on the left, slides out leftward) -->
+    <div class="music-bubble">
+      <span style="font-size: 0.85rem; font-weight: 600; color: #864e5a;" id="music-status-text">Sweet Music On</span>
+      <div class="music-notes-wave">
+        <div class="music-wave-bar"></div>
+        <div class="music-wave-bar"></div>
+        <div class="music-wave-bar"></div>
+      </div>
+    </div>
+
+    <!-- Rotating Vinyl Disc (placed on the right) -->
+    <div class="vinyl-disc" id="vinyl-disc" title="Click to Play/Pause your sweet background track">
+      <div class="vinyl-label">🎵</div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       🌸 8. FOOTER
+       ======================================================== -->
+  <!-- ========================================================
+       🌸 6.5 SURPRISE GAME CALL-TO-ACTION CARD
+       Matches the watercolor scrapbook theme
+       ======================================================== -->
+  <section class="scroll-reveal" id="surprise-game-cta" style="padding: 3rem 1rem; text-align: center;">
+    <div class="game-cta-card">
+      <!-- Torn Washi Tapes on corners -->
+      <div class="washi-tape washi-tape-left" style="background-color: rgba(255, 183, 197, 0.45); top: -14px; left: -15px; width: 110px; height: 28px;"></div>
+      <div class="washi-tape washi-tape-right" style="background-color: rgba(252, 225, 206, 0.55); top: -12px; right: -15px; width: 110px; height: 28px;"></div>
+
+      <div class="game-cta-emoji" style="font-size: 2.8rem; margin-bottom: 0.5rem; animation: floatEmoji 3s ease-in-out infinite alternate;">🍭🧁🍩🎂</div>
+
+      <h3 class="game-cta-title" style="font-family: 'Dancing Script', cursive; font-size: 2.6rem; color: var(--rose-dark); margin-bottom: 0.5rem;">
+        Sweet Birthday Games
+      </h3>
+      
+      <p class="game-cta-desc" style="font-size: 1rem; color: #864e5a; margin-bottom: 1.8rem; font-weight: 500; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6; padding: 0 1rem;">
+        I have hidden four special surprise games just for you. Choose between sliding cupcakes, matching candies, matching card memories, or flapping a cute cupcake to unlock magical surprises and custom birthday rewards!
+      </p>
+
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/game/index.html" target="_blank" class="btn-proposal" style="text-decoration: none; display: inline-block; padding: 0.8rem 2.2rem; font-size: 0.95rem;">
+          <span>Play Sweet 2048 🍭</span>
+        </a>
+        <a href="/game2/index.html" target="_blank" class="btn-proposal" style="text-decoration: none; display: inline-block; padding: 0.8rem 2.2rem; font-size: 0.95rem; background: linear-gradient(135deg, #FF8B9E 0%, #FFB7C5 100%);">
+          <span>Play Candy Match 🍬</span>
+        </a>
+        <a href="/game3/index.html" target="_blank" class="btn-proposal" style="text-decoration: none; display: inline-block; padding: 0.8rem 2.2rem; font-size: 0.95rem; background: linear-gradient(135deg, #8ECAE6 0%, #A0C4FF 100%);">
+          <span>Play Memory Match 🃏</span>
+        </a>
+        <a href="/game4/index.html" target="_blank" class="btn-proposal" style="text-decoration: none; display: inline-block; padding: 0.8rem 2.2rem; font-size: 0.95rem; background: linear-gradient(135deg, #FFB5A7 0%, #FFCAD4 100%);">
+          <span>Play Flappy Cupcake 🧁</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visual transition horizontal watercolor garland divider -->
+  <img src="assets/garland.png" class="garland-divider scroll-reveal" alt="" aria-hidden="true">
+
+  <footer
+    style="padding: 3rem 2rem; text-align: center; border-top: 1px dashed rgba(255, 183, 197, 0.3); background: #FFFBF7;">
+    <!-- ✏️ CUSTOMIZE: brand footer title -->
+    <h4
+      style="font-family: 'Dancing Script', cursive; font-size: 2rem; color: var(--rose-dark); margin-bottom: 0.5rem;">
+      A Special Surprise
+    </h4>
+    <p style="font-size: 0.85rem; color: #864e5a; opacity: 0.85;">
+      Made with love, warm parchment, & falling cherry blossoms · 2026
+    </p>
+  </footer>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js?v=2.0"></script>
+</body>
+
+</html>

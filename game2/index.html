@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🍬 Candy Match: Birthday Edition 🍬</title>
+  <meta name="description" content="Match the sweet candies to unlock Laiba's magical birthday gift boxes!">
+  <meta name="theme-color" content="#FFB7C5">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/game2/style.css?v=1.0">
+</head>
+
+<body>
+
+  <!-- Full-screen parchment overlay background -->
+  <div class="parchment-bg"></div>
+  <div class="tint-overlay"></div>
+
+  <div class="game-container">
+
+    <!-- ========================================================
+         🌸 HUD TOP BAR
+         ======================================================== -->
+    <header class="hud-bar">
+      <a href="/index.html" class="btn-exit" title="Back to birthday page">
+        <span>🌸<span class="btn-text"> Exit Game</span></span>
+      </a>
+      
+      <div class="score-panel">
+        <button class="btn-music" id="btn-music-toggle" title="Toggle background music">
+          <span>🎵<span class="btn-text"> Music On</span></span>
+        </button>
+        <button class="btn-restart" id="btn-restart-hud" title="Restart the game">
+          <span>🔄<span class="btn-text"> Restart</span></span>
+        </button>
+        <button class="btn-restart" id="btn-hint" title="Show a possible match">
+          <span>💡<span class="btn-text"> Hint</span></span>
+        </button>
+        <div class="score-box">
+          <div class="score-label">Score</div>
+          <div class="score-value" id="current-score">0</div>
+        </div>
+        <div class="score-box">
+          <div class="score-label">Moves</div>
+          <div class="score-value" id="moves-left">30</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         🌸 INTERACTIVE MATCH-3 GAME PLAY ARENA
+         ======================================================== -->
+    <main class="game-arena">
+      <!-- 8x8 Grid Container -->
+      <div class="board-container" id="board-container">
+        <div class="grid-container" id="grid-container">
+          <!-- Static background cell slots are spawned in JS (64 cells) -->
+        </div>
+        <!-- Interactive candies layer -->
+        <div class="candies-container" id="candies-container"></div>
+      </div>
+    </main>
+
+    <!-- ========================================================
+         🌸 FOOTER HELPER
+         ======================================================== -->
+    <footer class="control-footer">
+      <div class="goal-helper">Goal: Reach 1500 points 🌸</div>
+    </footer>
+
+  </div>
+
+  <!-- ========================================================
+       🎮 SCREEN OVERLAYS
+       ======================================================== -->
+
+  <!-- 1. START SCREEN -->
+  <div class="overlay-screen" id="start-screen">
+    <div class="scrapbook-card">
+      <div class="washi-tape washi-tape-left"></div>
+      <div class="washi-tape washi-tape-right"></div>
+
+      <div class="card-icon">🍬🍭🍪💖</div>
+      <h1 class="card-title">Candy Match</h1>
+      <p class="card-text">
+        Swap adjacent sweet candies to match 3 or more of the same type in a row or column!
+        <br><br>
+        Earn points with every match. Reach **1500 points** in under **30 moves** to unlock Laiba's magical birthday gift boxes!
+        <br><br>
+        *Click/Tap a candy and then click an adjacent candy to swap them!*
+      </p>
+      <button class="btn-magical" id="btn-start-game">
+        <span>Play Candy Match 🌸</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. WISH UNLOCKED SCREEN (INTERACTIVE GIFT BOXES) -->
+  <div class="overlay-screen hidden" id="victory-screen">
+    <div class="scrapbook-card victory-card" style="width: min(560px, 94vw); padding: 2rem 1.5rem;">
+      <div class="washi-tape washi-tape-left" style="background-color: rgba(252, 225, 206, 0.75); width: 140px;"></div>
+      <div class="washi-tape washi-tape-right" style="background-color: rgba(255, 183, 197, 0.75); width: 140px;"></div>
+
+      <div class="card-icon" style="animation: none;">🎁✨</div>
+      <h2 class="card-title" style="font-size: 2.5rem; margin-bottom: 0.2rem;">Gifts Unlocked!</h2>
+      <p style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--pink-medium); margin-bottom: 1.5rem; letter-spacing: 1.5px;">
+        Tap each box to open Laiba's birthday surprises
+      </p>
+
+      <!-- Grid of 4 Interactive Gift Boxes -->
+      <div class="gifts-grid">
+        <div class="gift-box-item" id="gift-0" data-opened="false">
+          <div class="gift-box-visual">🎁</div>
+          <div class="gift-box-label">Memory Card 💖</div>
+        </div>
+        <div class="gift-box-item" id="gift-1" data-opened="false">
+          <div class="gift-box-visual">🎁</div>
+          <div class="gift-box-label">Birthday Wish 🌸</div>
+        </div>
+        <div class="gift-box-item" id="gift-2" data-opened="false">
+          <div class="gift-box-visual">🎁</div>
+          <div class="gift-box-label">Promise Ticket 🍬</div>
+        </div>
+        <div class="gift-box-item" id="gift-3" data-opened="false">
+          <div class="gift-box-visual">🎁</div>
+          <div class="gift-box-label">Celebration 🎂</div>
+        </div>
+      </div>
+
+      <!-- Surprise card modal overlay inside victory card -->
+      <div class="gift-reveal-modal hidden" id="gift-reveal-modal">
+        <div class="reveal-card">
+          <button class="btn-close-reveal" id="btn-close-reveal">×</button>
+          <div class="reveal-header">🌸 Birthday Surprise 🌸</div>
+          <div class="reveal-content" id="reveal-content"></div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.8rem; margin-top: 1.8rem; width: 100%; justify-content: center; z-index: 10;">
+        <button class="btn-magical" id="btn-replay-game" style="background: var(--rose-dark); box-shadow: 0 4px 15px rgba(134, 78, 90, 0.25);">
+          <span>🌸 Play Again</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Javascript Logic -->
+  <script src="/game2/script.js?v=1.0"></script>
+</body>
+
+</html>

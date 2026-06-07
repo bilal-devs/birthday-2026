@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🧁 Flappy Cupcake: Birthday Edition 🧁</title>
+  <meta name="description" content="Tap to keep the cute cupcake flying through the cookie obstacles and unlock special birthday wishes!">
+  <meta name="theme-color" content="#FFB7C5">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/game4/style.css?v=1.0">
+</head>
+
+<body>
+
+  <div class="parchment-bg"></div>
+  <div class="tint-overlay"></div>
+
+  <div class="game-container">
+
+    <!-- ========================================================
+         🌸 HUD TOP BAR
+         ======================================================== -->
+    <header class="hud-bar">
+      <a href="/index.html" class="btn-exit" title="Back to birthday page">
+        <span>🌸<span class="btn-text"> Exit Game</span></span>
+      </a>
+      
+      <div class="score-panel">
+        <button class="btn-music" id="btn-music-toggle" title="Toggle background music">
+          <span>🎵<span class="btn-text"> Music On</span></span>
+        </button>
+        <button class="btn-restart" id="btn-restart-hud" title="Restart the game">
+          <span>🔄<span class="btn-text"> Restart</span></span>
+        </button>
+        <div class="score-box">
+          <div class="score-label">Score</div>
+          <div class="score-value" id="current-score">0</div>
+        </div>
+        <div class="score-box">
+          <div class="score-label">Best</div>
+          <div class="score-value" id="best-score">0</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         🌸 ARCADE CANVAS GAME ARENA
+         ======================================================== -->
+    <main class="game-arena">
+      <div class="board-container" id="board-container">
+        <!-- The Game Canvas -->
+        <canvas id="game-canvas"></canvas>
+        
+        <!-- Tap instruction helper overlay (disappears on start) -->
+        <div class="tap-to-flap-overlay" id="tap-to-flap-overlay">
+          <div class="tap-indicator">👆</div>
+          <div style="font-weight: 700; margin-top: 0.5rem;">Tap or Press Space to Flap</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ========================================================
+         🌸 FOOTER HELPER
+         ======================================================== -->
+    <footer class="control-footer">
+      <div class="goal-helper">Goal: Pass 8 cookie barriers to unlock the final surprise! 🌸</div>
+    </footer>
+
+  </div>
+
+  <!-- ========================================================
+       🎮 SCREEN OVERLAYS
+       ======================================================== -->
+
+  <!-- 1. START SCREEN -->
+  <div class="overlay-screen" id="start-screen">
+    <div class="scrapbook-card">
+      <div class="washi-tape washi-tape-left"></div>
+      <div class="washi-tape washi-tape-right"></div>
+
+      <div class="card-icon">🧁🍪🌸✨</div>
+      <h1 class="card-title">Flappy Cupcake</h1>
+      <p class="card-text">
+        Tap your screen (on mobile) or press the **Spacebar** / Click (on desktop) to flap the cupcake's wings and fly!
+        <br><br>
+        Navigate through the gaps in the giant cookie columns.
+        <br>
+        Reach a score of **8 points** to unlock Laiba's final romantic blessing vault!
+      </p>
+      <button class="btn-magical" id="btn-start-game">
+        <span>Flap Wings 🌸</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. GAME OVER / WISH UNLOCKED SCREEN (VICTORY MODAL) -->
+  <div class="overlay-screen hidden" id="gameover-screen">
+    <div class="scrapbook-card" style="width: min(540px, 94vw); padding: 2rem 1.5rem;" id="gameover-card">
+      <div class="washi-tape washi-tape-left" style="background-color: rgba(252, 225, 206, 0.75); width: 140px;"></div>
+      <div class="washi-tape washi-tape-right" style="background-color: rgba(255, 183, 197, 0.75); width: 140px;"></div>
+
+      <div class="card-icon" id="gameover-icon">🧁💥</div>
+      <h2 class="card-title" id="gameover-title" style="font-size: 2.5rem; margin-bottom: 0.2rem;">Game Over</h2>
+      <p id="gameover-subtitle" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--pink-medium); margin-bottom: 1.5rem; letter-spacing: 1.5px;">
+        Cupcake hit an obstacle!
+      </p>
+
+      <div class="victory-message-box hidden" id="victory-message-box">
+        <p style="font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: var(--rose-deep); line-height: 1.6; padding: 0.5rem 0;">
+          "Congratulations, My Love! You flew beautifully! May your life always fly high, rise above every obstacle, and be filled with sweet triumphs. Saalgirah Mubarak!" 💖
+        </p>
+      </div>
+
+      <div style="font-size: 1.2rem; font-weight: 700; color: var(--rose-dark); margin: 0.5rem 0 1rem;">
+        Your Score: <span id="final-score" style="color: var(--rose-deep); font-size: 1.6rem;">0</span>
+      </div>
+
+      <div style="display: flex; gap: 0.8rem; width: 100%; justify-content: center; z-index: 10;">
+        <button class="btn-magical" id="btn-replay-game" style="background: var(--rose-dark); box-shadow: 0 4px 15px rgba(134, 78, 90, 0.25);">
+          <span>🌸 Play Again</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Javascript Logic -->
+  <script src="/game4/script.js?v=1.0"></script>
+</body>
+
+</html>

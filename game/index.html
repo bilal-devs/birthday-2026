@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🍭 Sweet 2048: Birthday Cupcake Edition 🍭</title>
+  <meta name="description" content="Slide the sweet candies, cookies, and cupcakes to merge them! Reach the Choco Bar tile to unlock a secret birthday wishes scroll!">
+  <meta name="theme-color" content="#FFB7C5">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/game/style.css?v=3.0">
+</head>
+
+<body>
+
+  <div class="tint-overlay"></div>
+
+  <div class="game-container">
+
+    <!-- ========================================================
+         🌸 HUD TOP BAR
+         ======================================================== -->
+    <header class="hud-bar">
+      <a href="/index.html" class="btn-exit" title="Back to birthday page">
+        <span>🌸<span class="btn-text"> Exit Game</span></span>
+      </a>
+      
+      <div class="score-panel">
+        <button class="btn-music" id="btn-music-toggle" title="Toggle background music">
+          <span>🎵<span class="btn-text"> Music On</span></span>
+        </button>
+        <button class="btn-restart" id="btn-restart-hud" title="Restart the game">
+          <span>🔄<span class="btn-text"> Restart</span></span>
+        </button>
+        <div class="score-box">
+          <div class="score-label">Score</div>
+          <div class="score-value" id="current-score">0</div>
+        </div>
+        <div class="score-box">
+          <div class="score-label">Best</div>
+          <div class="score-value" id="best-score">0</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         🌸 INTERACTIVE GAME PLAY ARENA
+         ======================================================== -->
+    <main class="game-arena" id="game-arena">
+      
+      <!-- Left Area: The 4x4 Grid Board -->
+      <div class="board-container" id="board-container">
+        <!-- Static background slots -->
+        <div class="grid-container">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        
+        <!-- Interactive sliding tiles are spawned here -->
+        <div class="tile-container" id="tile-container"></div>
+      </div>
+
+
+
+    </main>
+
+    <!-- ========================================================
+         🌸 CONTROL FOOTER HELPER BUTTONS
+         ======================================================== -->
+    <footer class="control-footer">
+      <button class="btn-magical" id="btn-magic-bake" title="Let the magical baker automatically solve the board!">
+        <span>🌸 Magic Bake (Auto-Solve)</span>
+      </button>
+    </footer>
+
+  </div>
+
+  <!-- ========================================================
+       🎮 SCREEN OVERLAYS
+       ======================================================== -->
+
+  <!-- 1. START SCREEN -->
+  <div class="overlay-screen" id="start-screen">
+    <div class="scrapbook-card">
+      <div class="washi-tape washi-tape-left"></div>
+      <div class="washi-tape washi-tape-right"></div>
+
+      <div class="card-icon">🍭🧁🍩🎂</div>
+      <h1 class="card-title">Sweet 2048</h1>
+      <p class="card-text">
+        Slide matching sweet treats to merge them! 
+        <br><br>
+        🍬 Candy + 🍬 Candy = 🍭 Lollipop... and so on!
+        <br>
+        Merge up to the **🍨 Ice Cream** tile to unlock Laiba's magical birthday coupons!
+        <br><br>
+        *Use Arrow Keys / WASD (on desktop) or swipe your screen (on mobile) to play!*
+      </p>
+      <button class="btn-magical" id="btn-start-game">
+        <span>Bake Sweet Treats 🌸</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. WISH UNLOCKED SCREEN (VICTORY SCROLL) -->
+  <div class="overlay-screen hidden" id="victory-screen">
+    <div class="scrapbook-card" style="width: min(540px, 94vw); padding: 2rem 1.5rem;">
+      <div class="washi-tape washi-tape-left" style="background-color: rgba(252, 225, 206, 0.7); width: 140px;"></div>
+      <div class="washi-tape washi-tape-right" style="background-color: rgba(255, 183, 197, 0.7); width: 140px;"></div>
+
+      <div class="card-icon" style="animation: none;">🎂✨</div>
+      <h2 class="card-title" style="font-size: 2.8rem; margin-bottom: 0.2rem;">Rewards Unlocked!</h2>
+      <p style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--pink-medium); margin-bottom: 1rem; letter-spacing: 1.5px;">
+        Sweet Birthday Coupons for Laiba
+      </p>
+      <div class="wish-scroll-container">
+        <div class="coupons-carousel" id="coupons-carousel">
+          <div class="coupon-slide active" data-index="0">
+            <div class="coupon-ticket sealed" data-opened="false">
+              <div class="coupon-cover">🎁<br><span>Tap to Reveal Surprise</span></div>
+              <div class="ticket-notch notch-left"></div>
+              <div class="ticket-notch notch-right"></div>
+              <div class="coupon-tag">✨ SPECIAL COUPON ✨</div>
+              <h3 class="coupon-title">🍕🎲 Delivery Roulette</h3>
+              <p class="coupon-description">Redeem to get a surprise gourmet dessert or snack delivered to your door at a completely random hour of the day! 🍰</p>
+              <div class="coupon-footer">Redeemable: Anytime (Unlimited)</div>
+            </div>
+          </div>
+          <div class="coupon-slide" data-index="1">
+            <div class="coupon-ticket pink-ticket sealed" data-opened="false">
+              <div class="coupon-cover">🎁<br><span>Tap to Reveal Surprise</span></div>
+              <div class="ticket-notch notch-left"></div>
+              <div class="ticket-notch notch-right"></div>
+              <div class="coupon-tag">✨ SPECIAL COUPON ✨</div>
+              <h3 class="coupon-title">🎬🍿 Virtual Movie Picnic</h3>
+              <p class="coupon-description">You choose the movie or show, and I'll order hot popcorn, candy, and soda delivered right to your house! 🍿</p>
+              <div class="coupon-footer">Redeemable: Once (Valid Forever)</div>
+            </div>
+          </div>
+          <div class="coupon-slide" data-index="2">
+            <div class="coupon-ticket gold-ticket sealed" data-opened="false">
+              <div class="coupon-cover">🎁<br><span>Tap to Reveal Surprise</span></div>
+              <div class="ticket-notch notch-left"></div>
+              <div class="ticket-notch notch-right"></div>
+              <div class="coupon-tag">✨ SPECIAL COUPON ✨</div>
+              <h3 class="coupon-title">🎙️💤 Bedtime Story Voicemail</h3>
+              <p class="coupon-description">Redeem to unlock 3 custom voice notes from me: a warm morning wish, a sweet check-in, and a cozy bedtime story. 💕</p>
+              <div class="coupon-footer">Redeemable: Infinite Times</div>
+            </div>
+          </div>
+          <div class="coupon-slide" data-index="3">
+            <div class="coupon-ticket sealed" style="background: #F4F9FF; border-color: rgba(160, 196, 255, 0.6);" data-opened="false">
+              <div class="coupon-cover" style="background: #E8F1FF;">🎁<br><span>Tap to Reveal Surprise</span></div>
+              <div class="ticket-notch notch-left"></div>
+              <div class="ticket-notch notch-right"></div>
+              <div class="coupon-tag">✨ SPECIAL COUPON ✨</div>
+              <h3 class="coupon-title">🧩 Escape Room Date</h3>
+              <p class="coupon-description">Redeem for a virtual 3D escape room game or co-op puzzle date night together, sponsored by me! 🎮</p>
+              <div class="coupon-footer">Redeemable: Once (Valid Forever)</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Carousel controls -->
+        <div class="carousel-controls" style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+          <button class="btn-magical-small" id="btn-prev-coupon">
+            <span>‹ Previous</span>
+          </button>
+          <div class="carousel-dots" style="display: flex; align-items: center; gap: 0.5rem;">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+            <span class="dot" data-index="3"></span>
+          </div>
+          <button class="btn-magical-small" id="btn-next-coupon">
+            <span>Next ›</span>
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.8rem; margin-top: 1.8rem; width: 100%; justify-content: center;">
+        <button class="btn-magical" id="btn-continue-game" style="background: var(--pink-medium); box-shadow: 0 4px 15px rgba(255, 139, 158, 0.2);">
+          <span>🧁 Endless Mode</span>
+        </button>
+        <button class="btn-magical" id="btn-replay-game" style="background: var(--rose-dark); box-shadow: 0 4px 15px rgba(134, 78, 90, 0.2);">
+          <span>🌸 Replay Game</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Javascript Logic -->
+  <script src="/game/script.js?v=3.0"></script>
+</body>
+
+</html>

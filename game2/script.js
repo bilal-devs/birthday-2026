@@ -1310,10 +1310,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 300);
   }
 
+  let cachedBoardRect = null;
+  function getBoardRect() {
+    if (!cachedBoardRect) {
+      const board = document.getElementById('board-container');
+      if (board) {
+        cachedBoardRect = board.getBoundingClientRect();
+      }
+    }
+    return cachedBoardRect;
+  }
+  window.addEventListener('resize', () => {
+    cachedBoardRect = null;
+  });
+
   function spawnExpandingRing(row, col) {
     const parent = document.getElementById('board-container');
     if (!parent) return;
-    const boardRect = parent.getBoundingClientRect();
+    const boardRect = getBoardRect();
+    if (!boardRect) return;
     const cellW = boardRect.width / boardCols;
     const cellH = boardRect.height / boardRows;
     const startX = col * cellW + cellW / 2;
@@ -1330,7 +1345,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function createExplosionParticles(row, col) {
     const parent = document.getElementById('board-container');
-    const boardRect = parent.getBoundingClientRect();
+    const boardRect = getBoardRect();
+    if (!boardRect) return;
     const cellW = boardRect.width / boardCols;
     const cellH = boardRect.height / boardRows;
     
@@ -2149,7 +2165,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function createObstacleParticles(row, col, color, emoji) {
     const parent = document.getElementById('board-container');
-    const boardRect = parent.getBoundingClientRect();
+    const boardRect = getBoardRect();
+    if (!boardRect) return;
     const cellW = boardRect.width / boardCols;
     const cellH = boardRect.height / boardRows;
     const startX = col * cellW + cellW / 2;

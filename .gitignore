@@ -5,3 +5,7 @@ desktop.ini
 
 # Logs
 *.log
+
+# Exclude Game 3 and Game 4
+game3/
+game4/

@@ -56,6 +56,9 @@ body {
   min-height: 100vh;
   /* Scroll is locked initially for the envelope interaction */
   overflow-y: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body.unlocked {
@@ -330,9 +333,9 @@ body.unlocked .navbar {
   border: 1px solid rgba(255, 255, 255, 0.7);
   box-shadow: var(--shadow-glow);
   border-radius: var(--radius-lg);
-  padding: clamp(2rem, 5vw, 4.5rem);
+  padding: clamp(2.5rem, 5vw, 4.5rem);
   text-align: center;
-  max-width: 640px; /* Snug, luxury compact width */
+  max-width: 620px; /* Snug, luxury compact width */
   width: 100%;
   position: relative;
   /* Premium scrapbook double frame border styling */
@@ -342,26 +345,32 @@ body.unlocked .navbar {
   z-index: 2;
 }
 
-.hero-emoji {
-  font-size: 4rem;
-  display: inline-block;
-  animation: emojiFloat 4s infinite ease-in-out alternate;
+.hero-card-preheader {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  color: var(--rose-dark);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
 }
 
-@keyframes emojiFloat {
-  0% { transform: translateY(0) scale(1) rotate(-5deg); }
-  100% { transform: translateY(-12px) scale(1.05) rotate(5deg); }
+.hero-card-divider {
+  font-size: 1.8rem;
+  margin: 0.6rem 0;
+  display: inline-block;
+  animation: pulseRotate 6s linear infinite;
 }
 
 .hero-title {
   font-family: 'Dancing Script', cursive;
-  font-size: clamp(2.8rem, 7vw, 4.5rem);
+  font-size: clamp(2.8rem, 7vw, 4.2rem);
   /* Colorful, luxury handwriting gradient styling */
   background: linear-gradient(135deg, var(--rose-deep) 30%, #D86B82 70%, #FFB7C5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin: 1.5rem 0 1rem;
-  line-height: 1.2;
+  margin: 0.5rem 0;
+  line-height: 1.25;
   display: inline-block;
 }
 
@@ -371,7 +380,7 @@ body.unlocked .navbar {
   font-size: clamp(1.1rem, 3vw, 1.35rem);
   color: var(--soft-charcoal);
   line-height: 1.8;
-  margin-bottom: 2rem;
+  margin: 1.2rem 0 2rem 0;
   opacity: 0.9;
 }
 
@@ -909,7 +918,7 @@ body.unlocked .music-player-widget {
 .garland-divider {
   width: 240px; /* Slightly more delicate size */
   height: auto;
-  margin: 3.5rem auto; /* Increased spacing from 1.5rem to 3.5rem to serve as an elegant section paragraph break */
+  margin: 1.8rem auto; /* Tightened spacing for visual cohesion */
   opacity: 0.75; /* Softer visual presence */
   display: block;
   filter: drop-shadow(0 2px 8px rgba(255, 183, 197, 0.12));
@@ -1331,11 +1340,16 @@ body.unlocked .music-player-widget {
     top: -12px;
   }
 
-  /* Deep Letter padding adjustments (Give text breathing room) */
+  /* Deep Letter padding adjustments (Give text breathing room) & Mobile text blurriness fix */
   .deep-letter-container {
     padding: 1.8rem 1.2rem;
     margin: 0 auto;
     border-radius: var(--radius-md);
+    transform: none !important; /* Disables small rotations causing sub-pixel text rendering blurriness on mobile */
+    backdrop-filter: none !important; /* Bypasses mobile GPU raster blur bugs */
+    background: rgba(255, 255, 255, 0.96); /* Slightly more solid clean background for high readability */
+    transition: none !important; /* Removes active/focus transitions on mobile to keep layout stable */
+    box-shadow: 0 8px 25px rgba(255, 183, 197, 0.15);
   }
 
   .letter-header {
@@ -1962,5 +1976,330 @@ body.unlocked .music-player-widget {
   }
 }
 
+/* ---------- Premium Firework Particles ---------- */
+.firework-particle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10000;
+  will-change: transform, opacity;
+  transition: transform 1.2s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 1.2s ease-out;
+}
+
+/* ---------- Premium Balloon Particles ---------- */
+.balloon-particle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10000;
+  will-change: transform, opacity;
+  transition: transform 2.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 2.5s ease-out;
+}
+
+/* ---------- Redesigned Scrapbook Memory Lane (Eyes combined) ---------- */
+.scrapbook-memories-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.memories-section-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.8rem;
+  color: var(--rose-dark);
+  margin-bottom: 0.5rem;
+}
+
+.memories-section-subtitle {
+  font-size: 1rem;
+  color: #864e5a;
+  margin-bottom: 2.5rem;
+  font-weight: 500;
+}
+
+/* 3D Flip Scrapbook Card */
+.scrapbook-flip-card {
+  width: min(560px, 94vw);
+  height: 400px;
+  margin: 1.5rem auto;
+  perspective: 1500px;
+  cursor: pointer;
+}
+
+.scrapbook-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scrapbook-flip-card.flipped .scrapbook-card-inner {
+  transform: rotateY(180deg);
+}
+
+.scrapbook-card-front,
+.scrapbook-card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1.5rem;
+  box-shadow: var(--shadow-ambient);
+  border: 3px double rgba(216, 107, 130, 0.25);
+  outline: 6px solid rgba(255, 255, 255, 0.65);
+}
+
+.scrapbook-card-front {
+  background: linear-gradient(135deg, #FFFDFB 0%, #FFF5F7 100%);
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.scrapbook-card-back {
+  background: linear-gradient(135deg, #FFF9FA 0%, #FFFBF9 100%);
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+/* Polaroids overlapping spread style */
+.polaroids-spread-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 240px;
+  margin-bottom: 0.8rem;
+}
+
+.polaroid-frame {
+  position: absolute;
+  width: 195px;
+  background: #FFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0.7rem 0.7rem 1.5rem 0.7rem;
+  box-shadow: 0 10px 25px rgba(134, 78, 90, 0.08);
+  transition: all 0.4s var(--ease-spring);
+  border-radius: 4px;
+}
+
+.polaroid-frame img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.polaroid-photo-frame {
+  background: #EFEFEF;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+
+.polaroid-tag {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--rose-dark);
+  text-align: center;
+}
+
+/* Stack and tilt the two polaroids */
+.frame-left {
+  left: 10%;
+  transform: rotate(-7deg) translateY(-8px);
+  z-index: 4;
+}
+
+.frame-right {
+  right: 10%;
+  transform: rotate(6deg) translateY(8px);
+  z-index: 5;
+}
+
+.polaroid-frame:hover {
+  transform: rotate(0deg) scale(1.08) translateY(-10px);
+  z-index: 10;
+  box-shadow: 0 15px 35px rgba(134, 78, 90, 0.18);
+}
+
+/* Washi tapes on the frame corners */
+.washi-tape-frame-left {
+  position: absolute;
+  width: 70px;
+  height: 20px;
+  background: repeating-linear-gradient(45deg, rgba(206, 234, 204, 0.5) 0px, rgba(206, 234, 204, 0.5) 10px, rgba(220, 245, 218, 0.5) 10px, rgba(220, 245, 218, 0.5) 20px);
+  top: -10px;
+  left: -10px;
+  transform: rotate(-35deg);
+  clip-path: polygon(4% 0%, 96% 0%, 92% 100%, 8% 100%);
+}
+
+.washi-tape-frame-right {
+  position: absolute;
+  width: 70px;
+  height: 20px;
+  background: repeating-linear-gradient(45deg, rgba(255, 183, 197, 0.5) 0px, rgba(255, 183, 197, 0.5) 10px, rgba(255, 209, 220, 0.5) 10px, rgba(255, 209, 220, 0.5) 20px);
+  top: -10px;
+  right: -10px;
+  transform: rotate(35deg);
+  clip-path: polygon(4% 0%, 96% 0%, 92% 100%, 8% 100%);
+}
+
+.washi-tape-center-top {
+  position: absolute;
+  width: 90px;
+  height: 22px;
+  background: repeating-linear-gradient(45deg, rgba(252, 225, 206, 0.5) 0px, rgba(252, 225, 206, 0.5) 10px, rgba(255, 239, 224, 0.5) 10px, rgba(255, 239, 224, 0.5) 20px);
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  clip-path: polygon(4% 0%, 96% 0%, 92% 100%, 8% 100%);
+  z-index: 12;
+}
+
+.tap-hint-badge {
+  display: inline-block;
+  background: rgba(255, 183, 197, 0.15);
+  color: var(--rose-dark);
+  padding: 0.4rem 1.4rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px dashed rgba(255, 183, 197, 0.4);
+  animation: promptPulse 2s ease-in-out infinite alternate;
+}
+
+/* Back letter styling */
+.secret-scroll-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.scroll-heart-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.2rem;
+  animation: heartbeat 1.5s infinite ease-in-out;
+}
+
+.scroll-letter-header {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--rose-dark);
+  margin-bottom: 0.5rem;
+}
+
+.scroll-letter-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.55rem;
+  color: var(--soft-charcoal);
+  line-height: 1.45;
+  margin-bottom: 0.5rem;
+  max-width: 450px;
+}
+
+.scroll-letter-sign {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--rose-deep);
+  margin-top: 0.4rem;
+}
+
+/* Premium card overlays design polish */
+.deep-letter-container {
+  border: 3px double rgba(134, 78, 90, 0.25);
+  outline: 6px solid rgba(255, 255, 255, 0.75);
+  background-image: radial-gradient(rgba(255, 183, 197, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.scratch-card-container {
+  outline: 6px solid rgba(255, 255, 255, 0.7);
+  border: 3px double rgba(255, 183, 197, 0.35);
+}
+
+.cake-container {
+  outline: 6px solid rgba(255, 255, 255, 0.7);
+  border: 3px double rgba(255, 183, 197, 0.35);
+  background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,243,245,0.85) 100%);
+}
+
+.game-cta-card {
+  outline: 6px solid rgba(255, 255, 255, 0.7);
+  border: 3px double rgba(255, 183, 197, 0.35);
+}
+
+/* Mobile responsive fixes for Memories spread */
+@media (max-width: 600px) {
+  .scrapbook-flip-card {
+    height: 330px;
+    margin: 1rem auto;
+  }
+  .polaroids-spread-wrapper {
+    height: 180px;
+    margin-bottom: 0.5rem;
+  }
+  .polaroid-frame {
+    width: 135px;
+    padding: 0.5rem 0.5rem 1rem 0.5rem;
+  }
+  .polaroid-frame img {
+    height: 85px;
+  }
+  .polaroid-tag {
+    font-size: 0.95rem;
+  }
+  .frame-left {
+    left: 4%;
+  }
+  .frame-right {
+    right: 4%;
+  }
+  .scroll-heart-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.1rem;
+  }
+  .scroll-letter-header {
+    font-size: 1.6rem;
+    margin-bottom: 0.3rem;
+  }
+  .scroll-letter-text {
+    font-size: 1.25rem;
+    line-height: 1.35;
+    margin-bottom: 0.3rem;
+  }
+  .scroll-letter-sign {
+    font-size: 1.35rem;
+    margin-top: 0.2rem;
+  }
+}
 
 
+
+/* Nastaliq font for memory labels */
+.polaroid-tag.urdu {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: 1.45rem;
+  line-height: 2.2;
+  font-weight: 600;
+  color: var(--rose-deep);
+  text-shadow: 0 2px 4px rgba(216, 107, 130, 0.22);
+  padding: 0.2rem 0.1rem;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .polaroid-tag.urdu {
+    font-size: 1.15rem !important;
+    line-height: 2.0 !important;
+    padding: 0.1rem 0;
+  }
+}

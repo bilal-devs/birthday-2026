@@ -49,25 +49,53 @@
       </div>
     </header>
 
-    <!-- ========================================================
-         🌸 INTERACTIVE MATCH-3 GAME PLAY ARENA
-         ======================================================== -->
     <main class="game-arena">
-      <!-- 8x8 Grid Container -->
-      <div class="board-container" id="board-container">
-        <div class="grid-container" id="grid-container">
-          <!-- Static background cell slots are spawned in JS (64 cells) -->
+      <div class="arena-wrapper">
+        <!-- 8x8 Grid Container -->
+        <div class="board-container" id="board-container">
+          <div class="grid-container" id="grid-container">
+            <!-- Static background cell slots are spawned in JS (64 cells) -->
+          </div>
+          <!-- Interactive candies layer -->
+          <div class="candies-container" id="candies-container"></div>
         </div>
-        <!-- Interactive candies layer -->
-        <div class="candies-container" id="candies-container"></div>
+
+        <!-- ========================================================
+             🌸 POWER-UPS INVENTORY BAR
+             ======================================================== -->
+        <div class="powerups-bar" id="powerups-bar">
+          <button class="powerup-item" id="powerup-hammer" data-count="1" title="Candy Hammer: Destroy any single candy 🔨">
+            <span class="powerup-icon">🔨</span>
+            <span class="powerup-badge">1</span>
+          </button>
+          <button class="powerup-item" id="powerup-bomb" data-count="1" title="Candy Bomb: Explode a 3x3 area 💣">
+            <span class="powerup-icon">💣</span>
+            <span class="powerup-badge">1</span>
+          </button>
+          <button class="powerup-item" id="powerup-color" data-count="1" title="Color Wipe: Clear all candies of one color 🎨">
+            <span class="powerup-icon">🎨</span>
+            <span class="powerup-badge">1</span>
+          </button>
+          <button class="powerup-item" id="powerup-shuffle" data-count="1" title="Board Shuffle: Shuffle the board on demand 🌀">
+            <span class="powerup-icon">🌀</span>
+            <span class="powerup-badge">1</span>
+          </button>
+          <button class="powerup-item" id="powerup-rocket" data-count="1" title="Rocket Blaster: Clear row and column 🚀">
+            <span class="powerup-icon">🚀</span>
+            <span class="powerup-badge">1</span>
+          </button>
+        </div>
       </div>
     </main>
 
     <!-- ========================================================
          🌸 FOOTER HELPER
-         ======================================================== -->
-    <footer class="control-footer">
-      <div class="goal-helper">Goal: Reach 1500 points 🌸</div>
+         ======================================================= -->
+    <footer class="control-footer" style="position: relative; display: flex; width: 100%; justify-content: center; align-items: center;">
+      <button class="btn-level-drawer" id="btn-level-drawer" title="Switch level difficulty mid-game">
+        <span>⚙️ Levels</span>
+      </button>
+      <div class="goal-helper" id="goal-helper">Goal: Reach 4000 points 🌸</div>
     </footer>
 
   </div>
@@ -78,20 +106,29 @@
 
   <!-- 1. START SCREEN -->
   <div class="overlay-screen" id="start-screen">
-    <div class="scrapbook-card">
+    <div class="scrapbook-card" style="width: min(460px, 94vw); padding: 2rem 1.5rem;">
       <div class="washi-tape washi-tape-left"></div>
       <div class="washi-tape washi-tape-right"></div>
 
       <div class="card-icon">🍬🍭🍪💖</div>
       <h1 class="card-title">Candy Match</h1>
-      <p class="card-text">
+      <p class="card-text" style="margin-bottom: 1rem;">
         Swap adjacent sweet candies to match 3 or more of the same type in a row or column!
-        <br><br>
-        Earn points with every match. Reach **1500 points** in under **30 moves** to unlock Laiba's magical birthday gift boxes!
-        <br><br>
-        *Click/Tap a candy and then click an adjacent candy to swap them!*
+        <br>
+        Reach **1500 points** in under **30 moves** to unlock Laiba's magical birthday gift boxes!
       </p>
-      <button class="btn-magical" id="btn-start-game">
+
+      <!-- Level Selection Tabs -->
+      <div class="level-select-container">
+        <div class="level-select-label">Select Level:</div>
+        <div class="level-options">
+          <button class="btn-level-opt active" data-level="1">Classic 🍬</button>
+          <button class="btn-level-opt" data-level="2">Frozen Ice ❄️</button>
+          <button class="btn-level-opt" data-level="3">Wooden Boxes 📦</button>
+        </div>
+      </div>
+
+      <button class="btn-magical" id="btn-start-game" style="margin-top: 1.2rem;">
         <span>Play Candy Match 🌸</span>
       </button>
     </div>
@@ -148,6 +185,41 @@
       </div>
     </div>
   </div>
+
+  <!-- Bottom Level Selection Drawer -->
+  <div class="level-drawer" id="level-drawer">
+    <button class="btn-close-drawer" id="btn-close-drawer">×</button>
+    <div class="drawer-header">🌸 Select Level Difficulty 🌸</div>
+    <div class="drawer-level-options">
+      <button class="btn-drawer-opt active" data-level="1">
+        <span class="opt-icon">🍬</span>
+        <div class="opt-details">
+          <div class="opt-name">Classic</div>
+          <div class="opt-desc">Standard sweets, no obstacles. Goal: 4000 pts.</div>
+        </div>
+      </button>
+      <button class="btn-drawer-opt" data-level="2">
+        <span class="opt-icon">❄️</span>
+        <div class="opt-details">
+          <div class="opt-name">Frozen Ice</div>
+          <div class="opt-desc">Crush ice blocks to free candies. Goal: 4500 pts.</div>
+        </div>
+      </button>
+      <button class="btn-drawer-opt" data-level="3">
+        <span class="opt-icon">📦</span>
+        <div class="opt-details">
+          <div class="opt-name">Wooden Boxes</div>
+          <div class="opt-desc">Smash boxes to reveal candies. Goal: 5000 pts.</div>
+        </div>
+      </button>
+    </div>
+    <button class="btn-magical" id="btn-confirm-drawer" style="margin-top: 1rem; background: var(--rose-dark);">
+      <span>Done 🌸</span>
+    </button>
+  </div>
+
+  <!-- Milestone Toast Notification -->
+  <div class="milestone-toast" id="milestone-toast"></div>
 
   <!-- Javascript Logic -->
   <script src="/game2/script.js?v=1.0"></script>

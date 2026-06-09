@@ -163,43 +163,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Unique C major sweet lullaby chiptune theme
   const bgmMelody = [
-    261.63, 329.63, 392.00, 329.63, 293.66, 349.23, 440.00, 349.23,
-    329.63, 392.00, 523.25, 392.00, 349.23, 293.66, 261.63, 392.00
+    329.63, 392.00, 440.00, 523.25, 440.00, 392.00, 329.63, 293.66,
+    329.63, 392.00, 523.25, 587.33, 523.25, 392.00, 329.63, 392.00
   ];
   let melodyIdx = 0;
 
-  function playMelodyNote() {
-    if (!audioCtx || audioCtx.state === 'suspended' || !isMusicOn) return;
-    const now = audioCtx.currentTime;
-    
+  function playSynthVoice(freq, volume, type, time, duration = 0.5) {
     const osc = audioCtx.createOscillator();
-    const vibrato = audioCtx.createOscillator();
-    const vibratoGain = audioCtx.createGain();
     const gainNode = audioCtx.createGain();
-    
-    vibrato.connect(vibratoGain);
-    vibratoGain.connect(osc.frequency);
     
     osc.connect(gainNode);
     gainNode.connect(audioCtx.destination);
     
-    osc.type = 'triangle'; // Sweet warm flute-like chiptune
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, time);
+    // Sweet sliding envelope
+    osc.frequency.exponentialRampToValueAtTime(freq * 1.02, time + 0.05);
+    
+    gainNode.gain.setValueAtTime(volume, time);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, time + duration - 0.05);
+    
+    osc.start(time);
+    osc.stop(time + duration);
+  }
+
+  function playMelodyNote() {
+    if (!audioCtx || audioCtx.state === 'suspended' || !isMusicOn) return;
+    const now = audioCtx.currentTime;
     const freq = bgmMelody[melodyIdx];
-    osc.frequency.setValueAtTime(freq, now);
-    
-    vibrato.type = 'sine';
-    vibrato.frequency.setValueAtTime(4, now); // 4Hz slow sweet vibrato
-    vibratoGain.gain.setValueAtTime(freq * 0.015, now);
-    
-    gainNode.gain.setValueAtTime(0.05, now);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
-    
-    vibrato.start(now);
-    osc.start(now);
-    
-    vibrato.stop(now + 0.7);
-    osc.stop(now + 0.7);
-    
+
+    // Voice 1: Glockenspiel Melody (triangle wave)
+    playSynthVoice(freq, 0.06, 'triangle', now, 0.6);
+
+    // Voice 2: Soft Warm Bass (sine wave, 1 octave below)
+    playSynthVoice(freq / 2, 0.035, 'sine', now, 0.5);
+
+    // Voice 3: Glockenspiel Bubble Echo (sine wave, perfect fifth, delayed by 140ms)
+    playSynthVoice(freq * 1.5, 0.02, 'sine', now + 0.14, 0.4);
+
     melodyIdx = (melodyIdx + 1) % bgmMelody.length;
   }
 

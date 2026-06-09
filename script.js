@@ -66,56 +66,26 @@ document.addEventListener('DOMContentLoaded', () => {
       if (musicStatusText) musicStatusText.innerText = "Playing Sweet Melody";
     }).catch(err => console.log("Audio autoplay exception:", err));
 
-    // 3. Stagger the transition to show the beautiful handwritten greeting card modal
-    setTimeout(() => {
-      const letterModal = document.getElementById('letter-modal');
-      if (letterModal) {
-        letterModal.classList.add('active');
-      }
-    }, 1400); // Show modal after envelope fully unfolds and slides up the letter card!
-  }
-
-  if (waxSeal && envelopeScreen && envelopeWrapper) {
-    waxSeal.addEventListener('click', handleSealBreak);
-    waxSeal.addEventListener('touchstart', handleSealBreak, { passive: false });
-  }
-
-  // ——————————————————————————————————————————————————————
-  // 2.5 PREMIUM CARD MODAL ENTER ACTION
-  // ——————————————————————————————————————————————————————
-  const btnModalEnter = document.getElementById('btn-modal-enter');
-  const letterModal = document.getElementById('letter-modal');
-
-  function handleModalEnter(e) {
-    e.preventDefault();
-    // 1. Epic cherry blossom burst from clicked enter button!
-    if (!prefersReducedMotion) {
-      triggerBigPetalBurst(btnModalEnter);
-    }
-
-    // 2. Hide modal card smoothly
-    letterModal.classList.remove('active');
-
-    // 3. Slide the entire envelope screen overlay away after a small delay
+    // 3. Slide the entire envelope screen overlay away after envelope fully unfolds and slides up
     setTimeout(() => {
       if (envelopeScreen) {
         envelopeScreen.classList.add('hidden');
       }
       document.body.classList.add('unlocked');
 
-      // 4. Start the falling petal shower
+      // Start the falling petal shower
       if (!prefersReducedMotion) {
         startPetalShower();
       }
 
       // Trigger standard scroll reveal observer
       initScrollReveal();
-    }, 400);
+    }, 1600); // Transition to main page after envelope fully unfolds!
   }
 
-  if (btnModalEnter && letterModal) {
-    btnModalEnter.addEventListener('click', handleModalEnter);
-    btnModalEnter.addEventListener('touchstart', handleModalEnter, { passive: false });
+  if (waxSeal && envelopeScreen && envelopeWrapper) {
+    waxSeal.addEventListener('click', handleSealBreak);
+    waxSeal.addEventListener('touchstart', handleSealBreak, { passive: false });
   }
 
   // ——————————————————————————————————————————————————————
@@ -198,20 +168,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ——————————————————————————————————————————————————————
-  // 4. POLAROID CARD FLIP ACTIONS (CLICK & TOUCH FRIENDLY)
+  // 4. SCRAPBOOK FLIP ACTION (CLICK & TOUCH FRIENDLY)
   // ——————————————————————————————————————————————————————
-  const polaroids = document.querySelectorAll('.polaroid-card');
-  polaroids.forEach(card => {
-    card.addEventListener('click', (e) => {
-      // Toggle card flip
-      card.classList.toggle('flipped');
-
-      // Cute tiny sparkle splash on flip!
+  const scrapbookCard = document.getElementById('scrapbook-card');
+  if (scrapbookCard) {
+    const handleFlip = (e) => {
+      scrapbookCard.classList.toggle('flipped');
       if (!prefersReducedMotion) {
-        createSparkleSplash(e.clientX, e.clientY);
+        const x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
+        const y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
+        createSparkleSplash(x, y, 6);
       }
-    });
-  });
+    };
+    scrapbookCard.addEventListener('click', handleFlip);
+  }
 
   // ——————————————————————————————————————————————————————
   // 5. CUTE SPARKLER SPLASH (MICRO-INTERACTIONS)
@@ -313,8 +283,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function revealCakeSurprise() {
       cakeSurpriseCard.style.display = 'block';
+
+      // Play synthesized Happy Birthday melody and fade BGM
+      playHappyBirthdayMelody();
+      fadePauseBGM(6200);
+
+      // Trigger petal burst & cake fireworks cascade
       if (!prefersReducedMotion) {
         triggerBigPetalBurst(cakeSurpriseCard);
+        const cakeWrapper = document.querySelector('.cake-wrapper');
+        if (cakeWrapper) {
+          spawnBalloonsCascade(cakeWrapper);
+        }
       }
     }
 
@@ -534,6 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set canvas dimensions dynamically
     function resizeCanvas() {
+      if (!scratchArea || scratchArea.offsetWidth === 0 || scratchArea.offsetHeight === 0) return;
       canvas.width = scratchArea.offsetWidth;
       canvas.height = scratchArea.offsetHeight;
       drawCoating();
@@ -593,6 +574,24 @@ document.addEventListener('DOMContentLoaded', () => {
           resizeCanvas();
         }, 1800);
       });
+    }
+
+    // Call on load
+    setTimeout(resizeCanvas, 300);
+
+    // IntersectionObserver to guarantee layout visibility sizing
+    if ('IntersectionObserver' in window) {
+      const scratchObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !isRevealed) {
+            resizeCanvas();
+            if (canvas.width > 0) {
+              scratchObserver.unobserve(scratchArea);
+            }
+          }
+        });
+      }, { threshold: 0.05 });
+      scratchObserver.observe(scratchArea);
     }
 
     // Listeners for window scaling
@@ -694,9 +693,13 @@ document.addEventListener('DOMContentLoaded', () => {
         scratchPrompt.style.color = '#864e5a';
       }
 
-      // Massive cherry blossom victory petal explosion!
+      // Play synthesized arpeggio success sound
+      playScratchSuccessSound();
+
+      // Massive cherry blossom victory petal explosion & fireworks cascade!
       if (!prefersReducedMotion) {
         triggerBigPetalBurst(scratchArea);
+        spawnFireworksCascade(scratchArea);
       }
     }
   }
@@ -779,6 +782,307 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       setTimeout(() => p.remove(), 1200);
+    }
+  }
+
+  // ——————————————————————————————————————————————————————
+  // 9. PREMIUM AUDIO SYNTHESIS (WEB AUDIO API)
+  // ——————————————————————————————————————————————————————
+  let synthAudioCtx = null;
+
+  function initSynthAudio() {
+    if (!synthAudioCtx) {
+      synthAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (synthAudioCtx.state === 'suspended') {
+      synthAudioCtx.resume();
+    }
+  }
+
+  // Global user gesture listener to unlock Web Audio API AudioContext immediately
+  function unlockAudioContext() {
+    initSynthAudio();
+    // Remove listeners once unlocked
+    document.removeEventListener('click', unlockAudioContext);
+    document.removeEventListener('touchstart', unlockAudioContext);
+  }
+  document.addEventListener('click', unlockAudioContext);
+  document.addEventListener('touchstart', unlockAudioContext);
+
+  function playScratchSuccessSound() {
+    initSynthAudio();
+    const now = synthAudioCtx.currentTime;
+    // Bubbly cute toy chime arpeggio: E5 -> A5 -> C#6 -> E6
+    const notes = [659.25, 880.00, 1109.73, 1318.51];
+    
+    notes.forEach((freq, idx) => {
+      const osc = synthAudioCtx.createOscillator();
+      const gain = synthAudioCtx.createGain();
+      
+      // Triangle wave gives a cute bell-like toy-piano character
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+      
+      gain.gain.setValueAtTime(0.0, now + idx * 0.08);
+      gain.gain.linearRampToValueAtTime(0.15, now + idx * 0.08 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+      
+      osc.connect(gain);
+      gain.connect(synthAudioCtx.destination);
+      
+      osc.start(now + idx * 0.08);
+      osc.stop(now + idx * 0.08 + 0.4);
+    });
+  }
+
+  function playHappyBirthdayMelody() {
+    initSynthAudio();
+    const now = synthAudioCtx.currentTime;
+    
+    // Notes: [frequency, start_time, duration]
+    // Happy Birthday first half (C4 C4 D4 C4 F4 E4 | C4 C4 D4 C4 G4 F4)
+    const melody = [
+      [261.63, 0.0, 0.3],   // Hap-
+      [261.63, 0.35, 0.1],  // -py
+      [293.66, 0.5, 0.4],   // Birth-
+      [261.63, 0.95, 0.4],  // -day
+      [349.23, 1.4, 0.4],   // to
+      [329.63, 1.85, 0.8],  // you
+      
+      [261.63, 2.8, 0.3],   // Hap-
+      [261.63, 3.15, 0.1],  // -py
+      [293.66, 3.3, 0.4],   // Birth-
+      [261.63, 3.75, 0.4],  // -day
+      [392.00, 4.2, 0.4],   // to
+      [349.23, 4.65, 0.8]   // you
+    ];
+
+    melody.forEach(([freq, start, duration]) => {
+      const osc = synthAudioCtx.createOscillator();
+      const gain = synthAudioCtx.createGain();
+      
+      osc.type = 'sine'; // soft music box sine tone
+      osc.frequency.setValueAtTime(freq, now + start);
+      
+      gain.gain.setValueAtTime(0.0, now + start);
+      gain.gain.linearRampToValueAtTime(0.3, now + start + 0.05); // Attack (Louder)
+      gain.gain.exponentialRampToValueAtTime(0.001, now + start + duration); // Decay
+      
+      osc.connect(gain);
+      gain.connect(synthAudioCtx.destination);
+      
+      osc.start(now + start);
+      osc.stop(now + start + duration + 0.1);
+    });
+  }
+
+  function fadePauseBGM(durationMs) {
+    if (audio && !audio.paused) {
+      const originalVolume = audio.volume;
+      let vol = originalVolume;
+      
+      // Fade out BGM
+      const fadeOutInterval = setInterval(() => {
+        vol -= 0.05;
+        if (vol <= 0) {
+          audio.volume = 0;
+          audio.pause();
+          clearInterval(fadeOutInterval);
+        } else {
+          audio.volume = vol;
+        }
+      }, 50);
+
+      // Schedule BGM resume with fade in
+      setTimeout(() => {
+        audio.volume = 0;
+        audio.play().then(() => {
+          let volIn = 0;
+          const fadeInInterval = setInterval(() => {
+            volIn += 0.05;
+            if (volIn >= originalVolume) {
+              audio.volume = originalVolume;
+              clearInterval(fadeInInterval);
+            } else {
+              audio.volume = volIn;
+            }
+          }, 50);
+        }).catch(err => console.log("BGM play failed on resume:", err));
+      }, durationMs);
+    }
+  }
+
+  // ——————————————————————————————————————————————————————
+  // 10. PREMIUM FIREWORKS CELEBRATION EFFECTS
+  // ——————————————————————————————————————————————————————
+  function spawnFireworksCascade(element) {
+    if (!element) return;
+    const rect = element.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    
+    // 3 bursts at left-center, right-center, and middle-top
+    const bursts = [
+      { x: rect.left + width * 0.2, y: rect.top + height * 0.35 },
+      { x: rect.left + width * 0.8, y: rect.top + height * 0.25 },
+      { x: rect.left + width * 0.5, y: rect.top + height * 0.5 }
+    ];
+    
+    bursts.forEach((pos, idx) => {
+      setTimeout(() => {
+        createFireworkBurst(pos.x, pos.y);
+      }, idx * 350);
+    });
+  }
+
+  function createFireworkBurst(x, y) {
+    const colors = ['#FFB7C5', '#FFD1DC', '#FFE3E7', '#FCE1CE', '#BAE6FD', '#FDE047', '#C084FC'];
+    const emojis = ['✨', '🌸', '💖', '⭐', '🎈', '🎉'];
+    const particleCount = 28;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const p = document.createElement('div');
+      p.className = 'firework-particle';
+      
+      const useEmoji = Math.random() > 0.4;
+      if (useEmoji) {
+        p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        p.style.fontSize = `${Math.random() * 0.8 + 0.8}rem`;
+      } else {
+        p.style.width = `${Math.random() * 8 + 5}px`;
+        p.style.height = p.style.width;
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.borderRadius = '50%';
+        p.style.boxShadow = '0 0 8px rgba(255,183,197,0.5)';
+      }
+      
+      p.style.left = `${x + window.scrollX}px`;
+      p.style.top = `${y + window.scrollY}px`;
+      p.style.opacity = '1';
+      p.style.transform = 'translate(-50%, -50%) scale(0.5)';
+      
+      document.body.appendChild(p);
+      
+      // Calculate random explosion angle and distance
+      const angle = (Math.PI * 2 * i) / particleCount + (Math.random() * 0.2 - 0.1);
+      const distance = Math.random() * 120 + 60;
+      
+      requestAnimationFrame(() => {
+        const destX = Math.cos(angle) * distance;
+        const destY = Math.sin(angle) * distance - 25; // float slightly upwards
+        p.style.transform = `translate(calc(-50% + ${destX}px), calc(-50% + ${destY}px)) scale(1.1) rotate(${Math.random() * 720 - 360}deg)`;
+        p.style.opacity = '0';
+      });
+      
+      setTimeout(() => p.remove(), 1250);
+    }
+  }
+
+  function spawnBalloonsCascade(element) {
+    if (!element) return;
+    const rect = element.getBoundingClientRect();
+    
+    const count = 16;
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon-particle';
+        balloon.innerText = '🎈';
+        balloon.style.fontSize = `${Math.random() * 1.2 + 1.2}rem`;
+        balloon.style.left = `${rect.left + Math.random() * rect.width + window.scrollX}px`;
+        balloon.style.top = `${rect.bottom + window.scrollY}px`;
+        balloon.style.opacity = '1';
+        balloon.style.transform = 'translate(-50%, 0) scale(0.5)';
+        
+        document.body.appendChild(balloon);
+        
+        requestAnimationFrame(() => {
+          const driftX = Math.random() * 80 - 40;
+          const driftY = -(Math.random() * 150 + 150); // float upwards
+          balloon.style.transform = `translate(calc(-50% + ${driftX}px), ${driftY}px) scale(1.2) rotate(${Math.random() * 40 - 20}deg)`;
+          balloon.style.opacity = '0';
+        });
+        
+        setTimeout(() => balloon.remove(), 2500);
+      }, i * 120);
+    }
+  }
+
+  // celebrate-btn click celebration logic
+  const celebrateBtn = document.getElementById('celebrate-btn');
+  if (celebrateBtn) {
+    celebrateBtn.addEventListener('click', (e) => {
+      playCelebrateChime();
+      const rect = celebrateBtn.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      createSparkleSplash(x, y, 16);
+      triggerBigPetalBurst(celebrateBtn);
+      spawnConfettiShower();
+    });
+  }
+
+  function playCelebrateChime() {
+    initSynthAudio();
+    const now = synthAudioCtx.currentTime;
+    // Elegant celebratory arpeggio: C5 -> E5 -> G5 -> C6 -> E6 -> G6
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+
+    notes.forEach((freq, idx) => {
+      const osc = synthAudioCtx.createOscillator();
+      const gain = synthAudioCtx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+
+      gain.gain.setValueAtTime(0.0, now + idx * 0.07);
+      gain.gain.linearRampToValueAtTime(0.18, now + idx * 0.07 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.45);
+
+      osc.connect(gain);
+      gain.connect(synthAudioCtx.destination);
+
+      osc.start(now + idx * 0.07);
+      osc.stop(now + idx * 0.07 + 0.5);
+    });
+  }
+
+  function spawnConfettiShower() {
+    const colors = ['#FFB7C5', '#FFD1DC', '#FFE3E7', '#FCE1CE', '#BAE6FD', '#FDE047', '#C084FC'];
+    const confettiCount = 55;
+
+    for (let i = 0; i < confettiCount; i++) {
+      const confetti = document.createElement('div');
+      const size = Math.random() * 8 + 6;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const startLeft = Math.random() * 100;
+      const delay = Math.random() * 1.2;
+      const duration = Math.random() * 3.5 + 2.5;
+
+      confetti.style.cssText = `
+        position: fixed;
+        top: -20px;
+        left: ${startLeft}vw;
+        width: ${size}px;
+        height: ${size * (Math.random() * 1.2 + 0.6)}px;
+        background: ${color};
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+        pointer-events: none;
+        z-index: 99999;
+        opacity: 0.95;
+        transform: translateY(0) rotate(${Math.random() * 360}deg);
+        transition: transform ${duration}s linear ${delay}s, opacity ${duration}s ease-out ${delay}s;
+      `;
+
+      document.body.appendChild(confetti);
+
+      requestAnimationFrame(() => {
+        const driftX = Math.random() * 150 - 75;
+        confetti.style.transform = `translate(${driftX}px, 105vh) rotate(${Math.random() * 1080 - 540}deg)`;
+        confetti.style.opacity = '0';
+      });
+
+      setTimeout(() => confetti.remove(), (duration + delay) * 1000);
     }
   }
 });

@@ -339,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     } else if (gameLevel === 3) {
+      // Spawn 6 boxes
       let count = 0;
       while (count < 6) {
         let r = Math.floor(Math.random() * boardRows);
@@ -346,6 +347,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (grid[r][c] && grid[r][c].boxDurability === 0) {
           grid[r][c].setBox(2);
           count++;
+        }
+      }
+      // Combined Spawn: also spawn 4 frozen blocks
+      let iceCount = 0;
+      while (iceCount < 4) {
+        let r = Math.floor(Math.random() * boardRows);
+        let c = Math.floor(Math.random() * boardCols);
+        if (grid[r][c] && grid[r][c].boxDurability === 0 && !grid[r][c].isFrozen) {
+          grid[r][c].setFrozen(true);
+          iceCount++;
         }
       }
     }
@@ -1121,14 +1132,17 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Randomly spawn obstacles on newly dropped candies based on active level
         if (gameLevel === 2) {
-          // 15% chance to spawn ice on new drop
-          if (Math.random() < 0.15) {
+          // 20% chance to spawn ice on new drop (increased slightly for more challenge)
+          if (Math.random() < 0.20) {
             candy.setFrozen(true);
           }
         } else if (gameLevel === 3) {
-          // 15% chance to spawn wooden box on new drop
-          if (Math.random() < 0.15) {
+          // 15% chance to spawn wooden box, 10% chance to spawn ice block
+          const rand = Math.random();
+          if (rand < 0.15) {
             candy.setBox(2);
+          } else if (rand < 0.25) { // 0.15 to 0.25 is 10%
+            candy.setFrozen(true);
           }
         }
         
@@ -1196,8 +1210,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function shuffleBoard() {
     // Gather all basic candy values
     const values = [];
-    for (let r = 0; r < boardSize; r++) {
-      for (let c = 0; c < boardSize; c++) {
+    for (let r = 0; r < boardRows; r++) {
+      for (let c = 0; c < boardCols; c++) {
         if (grid[r][c] && grid[r][c].value < 6) {
           values.push(grid[r][c].value);
         }
@@ -1212,8 +1226,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Re-assign values to grid tiles, avoiding automatic matches
     let valIdx = 0;
-    for (let r = 0; r < boardSize; r++) {
-      for (let c = 0; c < boardSize; c++) {
+    for (let r = 0; r < boardRows; r++) {
+      for (let c = 0; c < boardCols; c++) {
         if (grid[r][c] && grid[r][c].value < 6) {
           let val = values[valIdx++];
           grid[r][c].updateValue(val);
@@ -1223,18 +1237,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function hasPossibleMoves() {
-    // Search grid for any swap that results in match-3
+    // Search grid for any swap that results in match-3, ignoring frozen/boxed candies
     for (let r = 0; r < boardRows; r++) {
       for (let c = 0; c < boardCols; c++) {
-        if (!grid[r][c]) continue;
+        if (!grid[r][c] || grid[r][c].isFrozen || grid[r][c].boxDurability > 0) continue;
 
         // Try right swap
-        if (c < boardCols - 1 && grid[r][c+1]) {
+        if (c < boardCols - 1 && grid[r][c+1] && !grid[r][c+1].isFrozen && grid[r][c+1].boxDurability === 0) {
           if (testSwapForMatch(r, c, r, c + 1)) return true;
         }
 
         // Try down swap
-        if (r < boardRows - 1 && grid[r+1][c]) {
+        if (r < boardRows - 1 && grid[r+1][c] && !grid[r+1][c].isFrozen && grid[r+1][c].boxDurability === 0) {
           if (testSwapForMatch(r, c, r + 1, c)) return true;
         }
       }
@@ -1265,15 +1279,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function getPossibleMove() {
     for (let r = 0; r < boardRows; r++) {
       for (let c = 0; c < boardCols; c++) {
-        if (!grid[r][c]) continue;
+        if (!grid[r][c] || grid[r][c].isFrozen || grid[r][c].boxDurability > 0) continue;
 
-        if (c < boardCols - 1 && grid[r][c+1]) {
+        if (c < boardCols - 1 && grid[r][c+1] && !grid[r][c+1].isFrozen && grid[r][c+1].boxDurability === 0) {
           if (testSwapForMatch(r, c, r, c + 1)) {
             return [grid[r][c], grid[r][c+1]];
           }
         }
 
-        if (r < boardRows - 1 && grid[r+1][c]) {
+        if (r < boardRows - 1 && grid[r+1][c] && !grid[r+1][c].isFrozen && grid[r+1][c].boxDurability === 0) {
           if (testSwapForMatch(r, c, r + 1, c)) {
             return [grid[r][c], grid[r+1][c]];
           }
@@ -1427,19 +1441,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const SURPRISES = [
     {
       title: "Memory Card 💖",
-      text: "I cherish the way you laugh at my silly jokes and how our chats always make the world feel so peaceful. Having you to share life's small moments is my favorite blessing. 💕"
+      text: "Of all the memories we share, my favorite ones are the simplest—your laugh when I say something silly, and the quiet comfort of just talking to you. You make the world so much softer and happier. 💕"
     },
     {
       title: "Birthday Wish 🌸",
-      text: "I wish you a lifetime of soft cherry blossom days, safe journeys, and a heart full of absolute peace. May this year grant every secret dream in your beautiful heart! 🌸✨"
+      text: "On your special day, my deepest prayer is for your absolute happiness, good health, and peace of mind. May Allah grant you success in everything you set your heart on and protect your beautiful smile always. 🌸✨"
     },
     {
       title: "Promise Ticket 🍬",
-      text: "I promise to always hold your hand through thick and thin, listen to all your late-night thoughts, make you smile when you're down, and be your safest, happiest sanctuary. 💖"
+      text: "This ticket entitles you to my lifetime support. I promise to always be there to listen to your thoughts, comfort you when you are tired, celebrate your wins, and walk beside you through everything. 💖"
     },
     {
       title: "Celebration 🎂",
-      text: "Happy Birthday, my favorite blessing! Let's celebrate your beautiful presence today and every day. You make the world brighter just by being in it! 🎂🎈"
+      text: "Happy Birthday to the sweetest soul! Today is all about celebrating you and the beautiful light you bring into my life. I hope this little surprise brings a smile to your face. I hope you like it! 🎂🎈"
     }
   ];
 
@@ -1890,8 +1904,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 1. Update target score based on level
     if (level === 1) targetScore = 5000;
-    else if (level === 2) targetScore = 7000;
-    else if (level === 3) targetScore = 8000;
+    else if (level === 2) targetScore = 10000;
+    else if (level === 3) targetScore = 12000;
     
     // 2. Update HUD Goal Helper text
     const goalHelper = document.getElementById('goal-helper');
@@ -1980,14 +1994,7 @@ document.addEventListener('DOMContentLoaded', () => {
         obstaclesChanged = true;
       }
       else if (level === 3) {
-        // Clear frozen, ensure wooden boxes
-        for (let r = 0; r < boardRows; r++) {
-          for (let c = 0; c < boardCols; c++) {
-            if (grid[r][c] && grid[r][c].isFrozen) {
-              grid[r][c].setFrozen(false);
-            }
-          }
-        }
+        // Keep frozen, ensure wooden boxes
         
         // Count existing boxes
         let boxCount = 0;
@@ -2006,6 +2013,26 @@ document.addEventListener('DOMContentLoaded', () => {
           if (grid[r][c] && grid[r][c].boxDurability === 0 && grid[r][c].value < 6) {
             grid[r][c].setBox(2);
             boxCount++;
+          }
+        }
+
+        // Count existing frozen
+        let frozenCount = 0;
+        for (let r = 0; r < boardRows; r++) {
+          for (let c = 0; c < boardCols; c++) {
+            if (grid[r][c] && grid[r][c].isFrozen) frozenCount++;
+          }
+        }
+
+        // Spawn additional frozen up to 4
+        let iceAttempts = 0;
+        while (frozenCount < 4 && iceAttempts < 100) {
+          iceAttempts++;
+          let r = Math.floor(Math.random() * boardRows);
+          let c = Math.floor(Math.random() * boardCols);
+          if (grid[r][c] && grid[r][c].boxDurability === 0 && !grid[r][c].isFrozen && grid[r][c].value < 6) {
+            grid[r][c].setFrozen(true);
+            frozenCount++;
           }
         }
         obstaclesChanged = true;
@@ -2222,4 +2249,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => p.remove(), 500);
     }
   }
+
+  // Initialize start screen target score text
+  applyLevelSelection(gameLevel, false);
 });

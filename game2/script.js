@@ -257,7 +257,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateValue(value) {
       this.value = value;
-      this.el.className = `candy candy-t-${value}`;
+      let classes = [`candy`, `candy-t-${value}`];
+      if (this.isFrozen) classes.push('frozen');
+      if (this.boxDurability === 2) classes.push('boxed-2');
+      if (this.boxDurability === 1) classes.push('boxed-1');
+      this.el.className = classes.join(' ');
       this.el.querySelector('.candy-inner span').innerText = CANDIES_EMOJIS[value];
     }
 
@@ -534,6 +538,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function swapCandies(candy1, candy2) {
+    if (candy1.isFrozen || candy1.boxDurability > 0 || candy2.isFrozen || candy2.boxDurability > 0) {
+      isSwappingOrFalling = false;
+      return;
+    }
     isSwappingOrFalling = true;
     candy1.el.classList.remove('selected');
     selectedCandy = null;
@@ -1110,6 +1118,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const candy = new Candy(-1 - i, c, val);
         grid[targetRow][c] = candy;
+        
+        // Randomly spawn obstacles on newly dropped candies based on active level
+        if (gameLevel === 2) {
+          // 15% chance to spawn ice on new drop
+          if (Math.random() < 0.15) {
+            candy.setFrozen(true);
+          }
+        } else if (gameLevel === 3) {
+          // 15% chance to spawn wooden box on new drop
+          if (Math.random() < 0.15) {
+            candy.setBox(2);
+          }
+        }
         
         setTimeout(() => {
           candy.updatePosition(targetRow, c);
@@ -1868,9 +1889,9 @@ document.addEventListener('DOMContentLoaded', () => {
     gameLevel = level;
     
     // 1. Update target score based on level
-    if (level === 1) targetScore = 4000;
-    else if (level === 2) targetScore = 4500;
-    else if (level === 3) targetScore = 5000;
+    if (level === 1) targetScore = 5000;
+    else if (level === 2) targetScore = 7000;
+    else if (level === 3) targetScore = 8000;
     
     // 2. Update HUD Goal Helper text
     const goalHelper = document.getElementById('goal-helper');

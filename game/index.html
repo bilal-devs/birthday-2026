@@ -5,11 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>🍭 Sweet 2048: Birthday Cupcake Edition 🍭</title>
-  <meta name="description" content="Slide the sweet candies, cookies, and cupcakes to merge them! Reach the Choco Bar tile to unlock a secret birthday wishes scroll!">
+  <meta name="description"
+    content="Slide the sweet candies, cookies, and cupcakes to merge them! Reach the Choco Bar tile to unlock a secret birthday wishes scroll!">
   <meta name="theme-color" content="#FFB7C5">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="/game/style.css?v=3.0">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/jameel-noori/fonts/jameel-noori-nastaleeq4.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/game/style.css?v=3.2">
 </head>
 
 <body>
@@ -25,7 +27,7 @@
       <a href="/index.html" class="btn-exit" title="Back to birthday page">
         <span>🌸<span class="btn-text"> Exit Game</span></span>
       </a>
-      
+
       <div class="score-panel">
         <button class="btn-music" id="btn-music-toggle" title="Toggle background music">
           <span>🎵<span class="btn-text"> Music On</span></span>
@@ -48,7 +50,7 @@
          🌸 INTERACTIVE GAME PLAY ARENA
          ======================================================== -->
     <main class="game-arena" id="game-arena">
-      
+
       <!-- Left Area: The 4x4 Grid Board -->
       <div class="board-container" id="board-container">
         <!-- Static background slots -->
@@ -57,23 +59,23 @@
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
-          
+
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
-          
+
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
-          
+
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
           <div class="grid-cell"></div>
         </div>
-        
+
         <!-- Interactive sliding tiles are spawned here -->
         <div class="tile-container" id="tile-container"></div>
       </div>
@@ -104,7 +106,7 @@
       <div class="card-icon">🍭🧁🍩🎂</div>
       <h1 class="card-title">Sweet 2048</h1>
       <p class="card-text">
-        Slide matching sweet treats to merge them! 
+        Slide matching sweet treats to merge them!
         <br><br>
         🍬 Candy + 🍬 Candy = 🍭 Lollipop... and so on!
         <br>
@@ -126,7 +128,8 @@
 
       <div class="card-icon" style="animation: none;">🎂✨</div>
       <h2 class="card-title" style="font-size: 2.8rem; margin-bottom: 0.2rem;">Rewards Unlocked!</h2>
-      <p style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--pink-medium); margin-bottom: 1rem; letter-spacing: 1.5px;">
+      <p
+        style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--pink-medium); margin-bottom: 1rem; letter-spacing: 1.5px;">
         Sweet Birthday Coupons for Laiba
       </p>
       <div class="wish-scroll-container">
@@ -137,9 +140,11 @@
               <div class="ticket-notch notch-left"></div>
               <div class="ticket-notch notch-right"></div>
               <div class="coupon-tag">✨ SPECIAL COUPON ✨</div>
-              <h3 class="coupon-title">🍕🎲 Delivery Roulette</h3>
-              <p class="coupon-description">Redeem this to get your favorite gourmet dessert, ice cream, or late-night snack sent directly to your door at a completely random hour of the day. A sweet surprise from me to you! 🍰</p>
-              <div class="coupon-footer">Redeemable: Anytime (Unlimited)</div>
+              <h3 class="coupon-title">🌸 Comfort & Care Day</h3>
+              <p class="coupon-description">Redeem this whenever you have had a tiring day. I promise to handle all
+                decisions, check in on you, send over your favorite comforting treat, and make sure your day is peaceful
+                and stress-free! 💖</p>
+              <div class="coupon-footer">Redeemable: Whenever you feel tired</div>
             </div>
           </div>
           <div class="coupon-slide" data-index="1">
@@ -148,9 +153,10 @@
               <div class="ticket-notch notch-left"></div>
               <div class="ticket-notch notch-right"></div>
               <div class="coupon-tag">✨ SPECIAL COUPON ✨</div>
-              <h3 class="coupon-title">🎬🍿 Virtual Movie Picnic</h3>
-              <p class="coupon-description">You pick the movie or show we watch together, and I will order a delivery of fresh popcorn, drinks, and sweets to your house so we can enjoy it fully! 🎬💖</p>
-              <div class="coupon-footer">Redeemable: Once (Valid Forever)</div>
+              <h3 class="coupon-title">💬 Heart-to-Heart Talk</h3>
+              <p class="coupon-description">Redeem this for a quiet, undivided evening of talking. No distractions, no
+                rush, just us sharing our dreams, stories, and listening to each other's hearts. 🌸</p>
+              <div class="coupon-footer">Redeemable: Anytime (Unlimited)</div>
             </div>
           </div>
           <div class="coupon-slide" data-index="2">
@@ -159,24 +165,29 @@
               <div class="ticket-notch notch-left"></div>
               <div class="ticket-notch notch-right"></div>
               <div class="coupon-tag">✨ SPECIAL COUPON ✨</div>
-              <h3 class="coupon-title">🎙️💤 Bedtime Story Voicemail</h3>
-              <p class="coupon-description">Redeem this to unlock three custom voice recordings from me whenever you need them: a warm morning wish, a soft reminder of how proud I am of you, and a peaceful bedtime story. 💕</p>
-              <div class="coupon-footer">Redeemable: Infinite Times</div>
+              <h3 class="coupon-title">💖 Keep Smiling Promise</h3>
+              <p class="coupon-description">I promise to always try my absolute best to keep a beautiful smile on your
+                face. Whenever you feel down, this card unlocks a sweet voice note, a silly joke, or a warm reminder of
+                how special you are. ✨</p>
+              <div class="coupon-footer">Redeemable: Valid Forever</div>
             </div>
           </div>
           <div class="coupon-slide" data-index="3">
-            <div class="coupon-ticket sealed" style="background: #F4F9FF; border-color: rgba(160, 196, 255, 0.6);" data-opened="false">
+            <div class="coupon-ticket sealed" style="background: #F4F9FF; border-color: rgba(160, 196, 255, 0.6);"
+              data-opened="false">
               <div class="coupon-cover" style="background: #E8F1FF;">🎁<br><span>Tap to Reveal Surprise</span></div>
               <div class="ticket-notch notch-left"></div>
               <div class="ticket-notch notch-right"></div>
               <div class="coupon-tag">✨ SPECIAL COUPON ✨</div>
-              <h3 class="coupon-title">🧩 Escape Room Date</h3>
-              <p class="coupon-description">Redeem this for a fun co-op puzzle game, virtual 3D escape room, or game date night together, completely planned and hosted by me! 🎮🌸</p>
+              <h3 class="coupon-title">🎬 Cozy Movie & Snack Night</h3>
+              <p class="coupon-description">Redeem this for a cozy movie night. You pick the movie or show, and I will
+                make sure your favorite sweets and snacks are delivered to your place so we can enjoy it fully together!
+                🍿🍬</p>
               <div class="coupon-footer">Redeemable: Once (Valid Forever)</div>
             </div>
           </div>
         </div>
-        
+
         <!-- Carousel controls -->
         <div class="carousel-controls" style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
           <button class="btn-magical-small" id="btn-prev-coupon">
@@ -195,10 +206,12 @@
       </div>
 
       <div style="display: flex; gap: 0.8rem; margin-top: 1.8rem; width: 100%; justify-content: center;">
-        <button class="btn-magical" id="btn-continue-game" style="background: var(--pink-medium); box-shadow: 0 4px 15px rgba(255, 139, 158, 0.2);">
+        <button class="btn-magical" id="btn-continue-game"
+          style="background: var(--pink-medium); box-shadow: 0 4px 15px rgba(255, 139, 158, 0.2);">
           <span>🧁 Endless Mode</span>
         </button>
-        <button class="btn-magical" id="btn-replay-game" style="background: var(--rose-dark); box-shadow: 0 4px 15px rgba(134, 78, 90, 0.2);">
+        <button class="btn-magical" id="btn-replay-game"
+          style="background: var(--rose-dark); box-shadow: 0 4px 15px rgba(134, 78, 90, 0.2);">
           <span>🌸 Replay Game</span>
         </button>
       </div>

@@ -146,20 +146,208 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ——————————————————————————————————————————————————————
-  // 4. SCRAPBOOK FLIP ACTION (CLICK & TOUCH FRIENDLY)
+  // 4. SCRAPBOOK FLIP ACTION & POLAROID MODAL LIGHTBOX WITH 3D FLIP
   // ——————————————————————————————————————————————————————
   const scrapbookCard = document.getElementById('scrapbook-card');
+  const polaroidLeft = document.getElementById('polaroid-left');
+  const polaroidRight = document.getElementById('polaroid-right');
+  const polaroidModal = document.getElementById('polaroid-modal');
+  const modalFlipCard = document.getElementById('modal-flip-card');
+  const modalImgFront = document.getElementById('modal-img-front');
+  const modalImgBack = document.getElementById('modal-img-back');
+  const modalTagFront = document.getElementById('modal-tag-front');
+  const polaroidModalClose = document.getElementById('polaroid-modal-close');
+  const polaroidModalBackdrop = document.getElementById('polaroid-modal-backdrop');
+
   if (scrapbookCard) {
-    const handleFlip = (e) => {
+    scrapbookCard.addEventListener('click', (e) => {
+      // Don't flip the parent scrapbook card if we clicked a polaroid frame
+      if (e.target.closest('.polaroid-frame')) {
+        return;
+      }
       scrapbookCard.classList.toggle('flipped');
       if (!prefersReducedMotion) {
         const x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
         const y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
         createSparkleSplash(x, y, 6);
       }
-    };
-    scrapbookCard.addEventListener('click', handleFlip);
+    });
   }
+
+  // Physics-based dynamic 3D rotation variables for Polaroid modal card
+  let currentAngle = 0;
+  let isDragging = false;
+  let startX = 0;
+  let startAngle = 0;
+  let velocity = 0;
+  let rotationSpeed = 1.35; // Initial slow spin speed (degrees per frame)
+  const autoSpinSpeed = 1.35;
+  const friction = 0.95; // Momentum decay rate
+  let animationId = null;
+  let previousAngle = 0;
+
+  function updateRotation() {
+    if (!polaroidModal || !polaroidModal.classList.contains('active')) {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+      return;
+    }
+
+    if (!isDragging) {
+      // Rotate card by rotation speed
+      currentAngle += rotationSpeed;
+
+      // Smoothly decay fast spin speed back down to default autoSpinSpeed
+      if (rotationSpeed > autoSpinSpeed) {
+        rotationSpeed = autoSpinSpeed + (rotationSpeed - autoSpinSpeed) * friction;
+      } else if (rotationSpeed < -autoSpinSpeed) {
+        rotationSpeed = -autoSpinSpeed + (rotationSpeed + autoSpinSpeed) * friction;
+      }
+
+      if (modalFlipCard) {
+        const inner = modalFlipCard.querySelector('.modal-card-inner');
+        if (inner) {
+          inner.style.transform = `rotateY(${currentAngle}deg)`;
+        }
+      }
+    }
+
+    animationId = requestAnimationFrame(updateRotation);
+  }
+
+  function startDrag(clientX) {
+    isDragging = true;
+    startX = clientX;
+    startAngle = currentAngle;
+    previousAngle = currentAngle;
+    velocity = 0;
+  }
+
+  function moveDrag(clientX) {
+    if (!isDragging) return;
+
+    const deltaX = clientX - startX;
+    // Map mouse movement to Y-rotation: 0.5 degrees per pixel
+    const nextAngle = startAngle + deltaX * 0.5;
+
+    // Capture instantaneous drag velocity
+    velocity = nextAngle - currentAngle;
+    currentAngle = nextAngle;
+
+    if (modalFlipCard) {
+      const inner = modalFlipCard.querySelector('.modal-card-inner');
+      if (inner) {
+        inner.style.transform = `rotateY(${currentAngle}deg)`;
+      }
+    }
+  }
+
+  function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    
+    // Convert drag velocity to momentum spin (capped to avoid excessive speeds)
+    rotationSpeed = Math.max(-15, Math.min(15, velocity));
+
+    // If released with negligible velocity, resume normal spin direction
+    if (Math.abs(rotationSpeed) < 0.1) {
+      rotationSpeed = autoSpinSpeed;
+    }
+  }
+
+  // Register drag and hold events on the modal flip card
+  if (modalFlipCard) {
+    // Mouse events
+    modalFlipCard.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      startDrag(e.clientX);
+    });
+    window.addEventListener('mousemove', (e) => {
+      moveDrag(e.clientX);
+    });
+    window.addEventListener('mouseup', () => {
+      endDrag();
+    });
+
+    // Touch events for mobile swiping
+    modalFlipCard.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches[0]) {
+        startDrag(e.touches[0].clientX);
+      }
+    }, { passive: true });
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches[0]) {
+        moveDrag(e.touches[0].clientX);
+      }
+    }, { passive: true });
+    window.addEventListener('touchend', () => {
+      endDrag();
+    });
+  }
+
+  // Helper function to open the 3D Lightbox Modal
+  function open3DModal(imgFrontSrc, imgBackSrc, tagUrdu, e) {
+    if (!polaroidModal || !modalFlipCard) return;
+
+    modalImgFront.src = imgFrontSrc;
+    modalImgBack.src = imgBackSrc;
+    modalTagFront.innerHTML = tagUrdu;
+
+    // Reset rotation variables
+    currentAngle = 0;
+    rotationSpeed = autoSpinSpeed;
+    isDragging = false;
+
+    // Reset rotation before opening modal
+    const inner = modalFlipCard.querySelector('.modal-card-inner');
+    if (inner) {
+      inner.style.transform = 'rotateY(0deg)';
+    }
+    
+    polaroidModal.classList.add('active');
+
+    // Start rotation loop
+    if (!animationId) {
+      animationId = requestAnimationFrame(updateRotation);
+    }
+
+    if (!prefersReducedMotion) {
+      const x = e.clientX || window.innerWidth / 2;
+      const y = e.clientY || window.innerHeight / 2;
+      createSparkleSplash(x, y, 10);
+      triggerWaxSealHearts(x, y);
+    }
+  }
+
+  if (polaroidLeft) {
+    polaroidLeft.addEventListener('click', (e) => {
+      e.stopPropagation(); // Stop parent scrapbook card from flipping
+      open3DModal('assets/eye1.jpeg', 'assets/flower_bouquet_vintage.png', 'آپ کی آنکھیں 👀', e);
+    });
+  }
+
+  if (polaroidRight) {
+    polaroidRight.addEventListener('click', (e) => {
+      e.stopPropagation(); // Stop parent scrapbook card from flipping
+      open3DModal('assets/eye2.jpeg', 'assets/floral_scrapbook_blossoms.png', 'آپ کی نظریں 💖', e);
+    });
+  }
+
+  // Close Modal
+  const closeModal = () => {
+    if (polaroidModal) {
+      polaroidModal.classList.remove('active');
+    }
+    if (animationId) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+  };
+
+  if (polaroidModalClose) polaroidModalClose.addEventListener('click', closeModal);
+  if (polaroidModalBackdrop) polaroidModalBackdrop.addEventListener('click', closeModal);
 
   // ——————————————————————————————————————————————————————
   // 5. CUTE SPARKLER SPLASH (MICRO-INTERACTIONS)
@@ -264,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Play synthesized Happy Birthday melody and fade BGM
       playHappyBirthdayMelody();
-      fadePauseBGM(6200);
+      fadePauseBGM(8500);
 
       // Trigger petal burst & cake fireworks cascade
       if (!prefersReducedMotion) {
@@ -797,70 +985,168 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', unlockAudioContext);
   document.addEventListener('touchstart', unlockAudioContext);
 
-  function playScratchSuccessSound() {
+  // Premium polyphonic synthesizer helper with detuned chorus, echo decay and ADSR envelopes
+  function playRichChime(notes, type = 'sine', duration = 1.6, stagger = 0.08, volume = 0.4) {
     initSynthAudio();
     const now = synthAudioCtx.currentTime;
-    // Bubbly cute toy chime arpeggio: E5 -> A5 -> C#6 -> E6
-    const notes = [659.25, 880.00, 1109.73, 1318.51];
+    
+    // Create dreamy stereo-emulated echo delay network
+    const delay = synthAudioCtx.createDelay();
+    delay.delayTime.value = 0.28; // 280ms echo time
+    
+    const feedback = synthAudioCtx.createGain();
+    feedback.gain.value = 0.35; // 35% echo volume feedback
+    
+    const filter = synthAudioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 1800; // soft warmth filter for echo tail
+    
+    // Feedback loop routing
+    delay.connect(feedback);
+    feedback.connect(filter);
+    filter.connect(delay);
+    
+    const masterGain = synthAudioCtx.createGain();
+    masterGain.gain.setValueAtTime(volume, now);
+    
+    delay.connect(masterGain);
+    masterGain.connect(synthAudioCtx.destination);
     
     notes.forEach((freq, idx) => {
-      const osc = synthAudioCtx.createOscillator();
+      const noteTime = now + idx * stagger;
+      
+      // Detuned dual oscillators for rich analog chorused voice
+      const osc1 = synthAudioCtx.createOscillator();
+      const osc2 = synthAudioCtx.createOscillator();
+      // High frequency harmonic oscillator for bell-like music box shimmer
+      const oscHarmonic = synthAudioCtx.createOscillator();
+      
       const gain = synthAudioCtx.createGain();
       
-      // Triangle wave gives a cute bell-like toy-piano character
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+      osc1.type = type;
+      osc2.type = type;
+      oscHarmonic.type = 'sine';
       
-      gain.gain.setValueAtTime(0.0, now + idx * 0.08);
-      gain.gain.linearRampToValueAtTime(0.15, now + idx * 0.08 + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+      osc1.frequency.setValueAtTime(freq, noteTime);
+      osc2.frequency.setValueAtTime(freq + 2.5, noteTime); // slightly detuned (+2.5 Hz)
+      oscHarmonic.frequency.setValueAtTime(freq * 2, noteTime); // 2nd harmonic (octave above)
       
-      osc.connect(gain);
-      gain.connect(synthAudioCtx.destination);
+      gain.gain.setValueAtTime(0.0, noteTime);
+      gain.gain.linearRampToValueAtTime(0.18, noteTime + 0.012); // fast attack (12ms)
+      gain.gain.exponentialRampToValueAtTime(0.001, noteTime + duration); // smooth decay
       
-      osc.start(now + idx * 0.08);
-      osc.stop(now + idx * 0.08 + 0.4);
+      osc1.connect(gain);
+      osc2.connect(gain);
+      
+      // Connect high harmonic gain
+      const harmonicGain = synthAudioCtx.createGain();
+      harmonicGain.gain.setValueAtTime(0.04, noteTime);
+      oscHarmonic.connect(harmonicGain);
+      harmonicGain.connect(gain);
+      
+      gain.connect(masterGain);
+      gain.connect(delay); // route into delay echo
+      
+      osc1.start(noteTime);
+      osc2.start(noteTime);
+      oscHarmonic.start(noteTime);
+      
+      osc1.stop(noteTime + duration + 0.1);
+      osc2.stop(noteTime + duration + 0.1);
+      oscHarmonic.stop(noteTime + duration + 0.1);
     });
+  }
+
+  function playScratchSuccessSound() {
+    // Upward sweeping magical bell sparkle
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98, 2093.00];
+    playRichChime(notes, 'sine', 1.8, 0.05, 0.45);
   }
 
   function playHappyBirthdayMelody() {
     initSynthAudio();
     const now = synthAudioCtx.currentTime;
+
+    const delay = synthAudioCtx.createDelay();
+    delay.delayTime.value = 0.22; // 220ms echo delay for sweet chimes
     
-    // Notes: [frequency, start_time, duration]
-    // Happy Birthday first half (C4 C4 D4 C4 F4 E4 | C4 C4 D4 C4 G4 F4)
+    const feedback = synthAudioCtx.createGain();
+    feedback.gain.value = 0.20; // 20% echo feedback for spatial depth without mud
+    
+    delay.connect(feedback);
+    feedback.connect(delay);
+    
+    const masterGain = synthAudioCtx.createGain();
+    masterGain.gain.setValueAtTime(0.4, now); // Sweet volume level
+    
+    delay.connect(masterGain);
+    masterGain.connect(synthAudioCtx.destination);
+
+    // High-pitched monophonic music box arrangement (scaled to ~7.5 seconds)
+    const speedFactor = 0.55; 
     const melody = [
-      [261.63, 0.0, 0.3],   // Hap-
-      [261.63, 0.35, 0.1],  // -py
-      [293.66, 0.5, 0.4],   // Birth-
-      [261.63, 0.95, 0.4],  // -day
-      [349.23, 1.4, 0.4],   // to
-      [329.63, 1.85, 0.8],  // you
-      
-      [261.63, 2.8, 0.3],   // Hap-
-      [261.63, 3.15, 0.1],  // -py
-      [293.66, 3.3, 0.4],   // Birth-
-      [261.63, 3.75, 0.4],  // -day
-      [392.00, 4.2, 0.4],   // to
-      [349.23, 4.65, 0.8]   // you
+      { f: 523.25, t: 0.0, d: 0.4 },   // C5
+      { f: 523.25, t: 0.4, d: 0.2 },   // C5
+      { f: 587.33, t: 0.6, d: 0.5 },   // D5
+      { f: 523.25, t: 1.2, d: 0.5 },   // C5
+      { f: 698.46, t: 1.8, d: 0.5 },   // F5
+      { f: 659.25, t: 2.4, d: 0.9 },   // E5
+
+      { f: 523.25, t: 3.5, d: 0.4 },   // C5
+      { f: 523.25, t: 3.9, d: 0.2 },   // C5
+      { f: 587.33, t: 4.1, d: 0.5 },   // D5
+      { f: 523.25, t: 4.7, d: 0.5 },   // C5
+      { f: 783.99, t: 5.3, d: 0.5 },   // G5
+      { f: 698.46, t: 5.9, d: 0.9 },   // F5
+
+      { f: 523.25, t: 7.0, d: 0.4 },   // C5
+      { f: 523.25, t: 7.4, d: 0.2 },   // C5
+      { f: 1046.50, t: 7.6, d: 0.6 },  // C6
+      { f: 880.00, t: 8.2, d: 0.6 },   // A5
+      { f: 698.46, t: 8.8, d: 0.6 },   // F5
+      { f: 659.25, t: 9.4, d: 0.6 },   // E5
+      { f: 587.33, t: 10.0, d: 0.8 },  // D5
+
+      { f: 932.33, t: 11.0, d: 0.4 },  // Bb5
+      { f: 932.33, t: 11.4, d: 0.2 },  // Bb5
+      { f: 880.00, t: 11.6, d: 0.6 },  // A5
+      { f: 698.46, t: 12.2, d: 0.6 },  // F5
+      { f: 783.99, t: 12.8, d: 0.6 },  // G5
+      { f: 698.46, t: 12.9, d: 1.0 }   // F5
     ];
 
-    melody.forEach(([freq, start, duration]) => {
+    melody.forEach(({f, t, d}) => {
+      const noteTime = now + (t * speedFactor);
+      const duration = d * speedFactor;
+      
       const osc = synthAudioCtx.createOscillator();
-      const gain = synthAudioCtx.createGain();
+      const oscOvertone = synthAudioCtx.createOscillator();
+      const noteGain = synthAudioCtx.createGain();
+      const overtoneGain = synthAudioCtx.createGain();
+
+      osc.type = 'triangle'; // triangle is soft and bell-like at high frequencies
+      osc.frequency.setValueAtTime(f, noteTime);
+
+      oscOvertone.type = 'sine';
+      oscOvertone.frequency.setValueAtTime(f * 3, noteTime); // 3rd harmonic quint shimmer
+
+      noteGain.gain.setValueAtTime(0.0, noteTime);
+      noteGain.gain.linearRampToValueAtTime(0.24, noteTime + 0.005); // sharp attack
+      noteGain.gain.exponentialRampToValueAtTime(0.001, noteTime + duration); // exponential decay
+
+      overtoneGain.gain.setValueAtTime(0.015, noteTime); // soft chime overtone
+
+      osc.connect(noteGain);
+      oscOvertone.connect(overtoneGain);
+      overtoneGain.connect(noteGain);
       
-      osc.type = 'sine'; // soft music box sine tone
-      osc.frequency.setValueAtTime(freq, now + start);
-      
-      gain.gain.setValueAtTime(0.0, now + start);
-      gain.gain.linearRampToValueAtTime(0.3, now + start + 0.05); // Attack (Louder)
-      gain.gain.exponentialRampToValueAtTime(0.001, now + start + duration); // Decay
-      
-      osc.connect(gain);
-      gain.connect(synthAudioCtx.destination);
-      
-      osc.start(now + start);
-      osc.stop(now + start + duration + 0.1);
+      noteGain.connect(masterGain);
+      noteGain.connect(delay);
+
+      osc.start(noteTime);
+      oscOvertone.start(noteTime);
+      osc.stop(noteTime + duration + 0.1);
+      oscOvertone.stop(noteTime + duration + 0.1);
     });
   }
 
@@ -1011,28 +1297,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function playCelebrateChime() {
-    initSynthAudio();
-    const now = synthAudioCtx.currentTime;
-    // Elegant celebratory arpeggio: C5 -> E5 -> G5 -> C6 -> E6 -> G6
-    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
-
-    notes.forEach((freq, idx) => {
-      const osc = synthAudioCtx.createOscillator();
-      const gain = synthAudioCtx.createGain();
-
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, now + idx * 0.07);
-
-      gain.gain.setValueAtTime(0.0, now + idx * 0.07);
-      gain.gain.linearRampToValueAtTime(0.18, now + idx * 0.07 + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.45);
-
-      osc.connect(gain);
-      gain.connect(synthAudioCtx.destination);
-
-      osc.start(now + idx * 0.07);
-      osc.stop(now + idx * 0.07 + 0.5);
-    });
+    // Elegant celebratory arpeggio: C5 -> E5 -> G5 -> B5 -> D6 -> G6 using music box sound
+    const notes = [523.25, 659.25, 783.99, 987.77, 1174.66, 1567.98];
+    playRichChime(notes, 'triangle', 2.0, 0.07, 0.5);
   }
 
   function spawnConfettiShower() {

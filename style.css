@@ -7,6 +7,7 @@
    Strictly zero generic SaaS styles. Fully custom.
    ======================================================== */
 
+@import url('https://cdn.jsdelivr.net/npm/jameel-noori@1.1.2/jameel-noori.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
 
 :root {
@@ -88,7 +89,7 @@ body.unlocked {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background-image: linear-gradient(135deg, rgba(255, 251, 247, 0.88), rgba(255, 243, 245, 0.86)), url('assets/laiba-child.jpg');
+  background-image: linear-gradient(135deg, rgba(255, 251, 247, 0.74), rgba(255, 243, 245, 0.72)), url('assets/laiba-child.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -112,15 +113,16 @@ body.unlocked {
   background: linear-gradient(135deg, var(--rose-deep) 30%, #D86B82 70%, #FFB7C5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 2.2rem;
+  margin-bottom: 3.5rem;
+  transform: translateY(-25px);
   text-align: center;
   text-shadow: 0 4px 15px rgba(134, 78, 90, 0.08);
   animation: promptPulse 2.5s ease-in-out infinite alternate;
 }
 
 @keyframes promptPulse {
-  0% { transform: scale(0.97); opacity: 0.8; }
-  100% { transform: scale(1.03); opacity: 1; }
+  0% { transform: translateY(-25px) scale(0.97); opacity: 0.8; }
+  100% { transform: translateY(-25px) scale(1.03); opacity: 1; }
 }
 
 /* Realistic Scrapbook Envelope (Desktop-optimized base sizing) */
@@ -167,7 +169,7 @@ body.unlocked {
   opacity: 0.8;
 }
 
-/* Heart Wax Seal */
+/* Heart Wax Seal Wrapper */
 .wax-seal {
   position: absolute;
   top: 50%;
@@ -175,33 +177,60 @@ body.unlocked {
   transform: translate(-50%, -50%);
   width: 95px;
   height: 95px;
-  background: radial-gradient(circle at 35% 35%, #FF8DA6 0%, #D83B5C 60%, #850B24 100%);
-  border-radius: 50%;
-  border: 3px solid rgba(252, 225, 206, 0.85);
-  box-shadow: 
-    0 10px 30px rgba(159, 22, 52, 0.35), 
-    inset 0 2px 6px rgba(255, 255, 255, 0.5), 
-    inset 0 -2px 6px rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 10;
+  cursor: pointer;
   transition: transform 0.4s var(--ease-spring);
 }
 
-.wax-seal::after {
-  content: '🌸';
+.wax-seal:hover {
+  transform: translate(-50%, -50%) scale(1.15) rotate(8deg);
+}
+
+.seal-half {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: radial-gradient(circle at center, #FF8DA6 0%, #D83B5C 60%, #850B24 100%);
+  border: 3.5px solid rgba(252, 225, 206, 0.85);
+  box-shadow: 
+    0 10px 30px rgba(159, 22, 52, 0.25), 
+    inset 0 2px 6px rgba(255, 255, 255, 0.4), 
+    inset 0 -2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s;
+  pointer-events: none;
+}
+
+.seal-half.left {
+  left: 0;
+  border-radius: 95px 0 0 95px;
+  border-right: none;
+  transform-origin: center left;
+}
+
+.seal-half.right {
+  right: 0;
+  border-radius: 0 95px 95px 0;
+  border-left: none;
+  transform-origin: center right;
+}
+
+.seal-cherry {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 2.2rem;
+  z-index: 11;
+  pointer-events: none;
+  transition: transform 0.6s, opacity 0.5s;
   animation: sealGlow 2s infinite alternate;
 }
 
 @keyframes sealGlow {
   0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255,255,255,0.6)); }
   100% { transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
-}
-
-.wax-seal:hover {
-  transform: translate(-50%, -50%) scale(1.15) rotate(8deg);
 }
 
 /* Falling sparkles around the envelope */
@@ -263,9 +292,7 @@ body.unlocked {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 251, 247, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 251, 247, 0.96);
   border-bottom: 1px solid rgba(255, 183, 197, 0.15);
   transition: all 0.4s var(--ease-smooth);
   opacity: 0;
@@ -621,13 +648,19 @@ body.unlocked .navbar {
 /* Urdu styling inside the letter */
 .urdu-text {
   direction: rtl;
-  font-family: 'Noto Nastaliq Urdu', serif;
-  font-size: 1.35rem;
+  font-family: 'JameelNooriNastaliq', 'Urdu Typesetting', 'Segoe UI Historic', 'Microsoft Uighur', 'Noto Nastaliq Urdu', serif;
+  font-size: 1.75rem;
   line-height: 2.4;
   color: var(--rose-deep);
   margin: 2rem 0;
   text-align: center;
   display: block;
+}
+
+.allah-text {
+  font-family: 'JameelNooriNastaliq', 'Urdu Typesetting', 'Segoe UI Historic', 'Microsoft Uighur', 'Noto Nastaliq Urdu', 'Segoe UI', Tahoma, sans-serif;
+  font-weight: normal;
+  display: inline-block;
 }
 
 .letter-footer {
@@ -737,8 +770,7 @@ body.unlocked .navbar {
   display: none;
   margin-top: 2rem;
   padding: 2rem 1.5rem;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.97);
   border-radius: var(--radius-md);
   border: 1.5px solid rgba(255, 183, 197, 0.45);
   box-shadow: 0 12px 30px rgba(255, 183, 197, 0.18);
@@ -1078,7 +1110,8 @@ body.unlocked .music-player-widget {
 
 /* ---------- Premium Glassmorphic Envelope Helper Badge ---------- */
 .envelope-helper-badge {
-  margin-top: 2.5rem;
+  margin-top: 3.8rem;
+  transform: translateY(25px);
   background: rgba(255, 255, 255, 0.95);
   padding: 0.6rem 1.8rem;
   border-radius: var(--radius-full);
@@ -1098,7 +1131,7 @@ body.unlocked .music-player-widget {
 }
 
 .envelope-helper-badge:hover {
-  transform: translateY(-2px);
+  transform: translateY(22px);
   background: rgba(255, 255, 255, 0.85);
   box-shadow: 0 10px 25px rgba(255, 183, 197, 0.15);
 }
@@ -1130,20 +1163,29 @@ body.unlocked .music-player-widget {
 /* The physical paper letter tucked inside */
 .envelope-letter {
   position: absolute;
-  bottom: 10px;
+  bottom: 15px;
   width: 90%;
-  height: 80%;
-  background: #FFFBF9;
-  border-radius: 6px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  height: 82%;
+  background: #FFFDFB;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(134, 78, 90, 0.08);
   z-index: 2;
-  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  border: 1px dashed rgba(255, 183, 197, 0.4);
+  padding: 1.5rem 1rem;
+  border: 1px dashed rgba(216, 107, 130, 0.45);
+}
+
+.envelope-letter::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.3); /* Gold inner border */
+  border-radius: 6px;
+  pointer-events: none;
 }
 
 .envelope-letter-heart {
@@ -1161,7 +1203,7 @@ body.unlocked .music-player-widget {
 
 /* Tucked state: sits low. When opened, it slides UP! */
 .envelope-wrapper.open .envelope-letter {
-  transform: translateY(-90px) scale(1.05);
+  transform: translateY(-135px) rotate(-3deg) scale(1.06);
   z-index: 5;
 }
 
@@ -1238,10 +1280,106 @@ body.unlocked .music-player-widget {
   }
 }
 
-/* Split seal when open */
-.envelope-wrapper.open .wax-seal {
-  transform: translate(-50%, -50%) scale(0) rotate(20deg);
+/* Split seal halves when open */
+.envelope-wrapper.open .seal-half.left {
+  transform: translateX(-48px) rotate(-18deg);
   opacity: 0;
+}
+
+.envelope-wrapper.open .seal-half.right {
+  transform: translateX(48px) rotate(18deg);
+  opacity: 0;
+}
+
+.envelope-wrapper.open .seal-cherry {
+  transform: scale(0) rotate(60deg);
+  opacity: 0;
+}
+
+/* Swaying side garlands on envelope screen */
+.screen-garland {
+  position: absolute;
+  top: 15%;
+  width: 120px;
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 0.5s ease;
+}
+
+.screen-garland.left-edge {
+  left: -20px;
+  transform: rotate(90deg) scaleY(-1);
+  animation: garlandSwayLeft 6s ease-in-out infinite alternate;
+}
+
+.screen-garland.right-edge {
+  right: -20px;
+  transform: rotate(-90deg);
+  animation: garlandSwayRight 6s ease-in-out infinite alternate;
+}
+
+@keyframes garlandSwayLeft {
+  0% { transform: rotate(87deg) scaleY(-1) translateY(0); }
+  100% { transform: rotate(93deg) scaleY(-1) translateY(5px); }
+}
+
+@keyframes garlandSwayRight {
+  0% { transform: rotate(-87deg) translateY(0); }
+  100% { transform: rotate(-93deg) translateY(5px); }
+}
+
+/* Ambient floating preview petals */
+.floating-petal-ambient {
+  position: absolute;
+  font-size: 1.5rem;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.floating-petal-ambient:nth-child(even) {
+  animation: floatAcrossRight 9s linear infinite;
+}
+.floating-petal-ambient:nth-child(odd) {
+  animation: floatAcrossLeft 11s linear infinite;
+}
+
+@keyframes floatAcrossRight {
+  0% { transform: translate(-10vw, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.3; }
+  50% { transform: translate(50vw, 25px) rotate(180deg); }
+  90% { opacity: 0.3; }
+  100% { transform: translate(110vw, -30px) rotate(360deg); opacity: 0; }
+}
+
+@keyframes floatAcrossLeft {
+  0% { transform: translate(100vw, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.28; }
+  50% { transform: translate(45vw, -25px) rotate(-180deg); }
+  90% { opacity: 0.28; }
+  100% { transform: translate(-10vw, -40px) rotate(-360deg); opacity: 0; }
+}
+
+/* Corner branches swaying animations */
+.bloom-accent.top-right {
+  animation: branchSwayRight 5s ease-in-out infinite alternate;
+  transform-origin: top right;
+}
+
+.bloom-accent.top-left {
+  animation: branchSwayLeft 5s ease-in-out infinite alternate;
+  transform-origin: top left;
+}
+
+@keyframes branchSwayRight {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(2deg) scale(1.02); }
+}
+
+@keyframes branchSwayLeft {
+  0% { transform: scaleX(-1) rotate(0deg); }
+  100% { transform: scaleX(-1) rotate(-2deg) scale(1.02); }
 }
 
 /* ---------- Responsive & Mobile-First Presentation ---------- */
@@ -1357,8 +1495,8 @@ body.unlocked .music-player-widget {
   }
 
   .urdu-text {
-    font-size: 1.2rem;
-    line-height: 2.2;
+    font-size: 1.55rem;
+    line-height: 2.4;
     margin: 1.5rem 0;
   }
 
@@ -1790,9 +1928,7 @@ body.unlocked .music-player-widget {
 .modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(134, 78, 90, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(134, 78, 90, 0.75);
   z-index: 1;
 }
 
@@ -2064,20 +2200,21 @@ body.unlocked .music-player-widget {
 
 .polaroid-frame {
   position: absolute;
-  width: 195px;
+  width: 230px;
   background: #FFF;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  padding: 0.7rem 0.7rem 1.5rem 0.7rem;
-  box-shadow: 0 10px 25px rgba(134, 78, 90, 0.08);
+  padding: 0.8rem 0.8rem 1.8rem 0.8rem;
+  box-shadow: 0 12px 30px rgba(134, 78, 90, 0.1);
   transition: all 0.4s var(--ease-spring);
-  border-radius: 4px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .polaroid-frame img {
   width: 100%;
-  height: 130px;
+  height: 160px;
   object-fit: cover;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .polaroid-photo-frame {
@@ -2097,21 +2234,22 @@ body.unlocked .music-player-widget {
 
 /* Stack and tilt the two polaroids */
 .frame-left {
-  left: 10%;
-  transform: rotate(-7deg) translateY(-8px);
+  left: 6%;
+  transform: rotate(-8deg) translateY(-10px);
   z-index: 4;
 }
 
 .frame-right {
-  right: 10%;
-  transform: rotate(6deg) translateY(8px);
+  right: 6%;
+  transform: rotate(6deg) translateY(10px);
   z-index: 5;
 }
 
+/* Hover effect targets the wrapper, applying scaling and z-index elevation */
 .polaroid-frame:hover {
-  transform: rotate(0deg) scale(1.08) translateY(-10px);
-  z-index: 10;
-  box-shadow: 0 15px 35px rgba(134, 78, 90, 0.18);
+  z-index: 20;
+  transform: rotate(0deg) scale(1.12) translateY(-15px);
+  box-shadow: 0 20px 40px rgba(134, 78, 90, 0.2), 0 0 15px rgba(255, 183, 197, 0.35);
 }
 
 /* Washi tapes on the frame corners */
@@ -2228,28 +2366,30 @@ body.unlocked .music-player-widget {
 /* Mobile responsive fixes for Memories spread */
 @media (max-width: 600px) {
   .scrapbook-flip-card {
-    height: 330px;
+    height: 360px;
     margin: 1rem auto;
   }
   .polaroids-spread-wrapper {
-    height: 180px;
+    height: 220px;
     margin-bottom: 0.5rem;
   }
   .polaroid-frame {
-    width: 135px;
-    padding: 0.5rem 0.5rem 1rem 0.5rem;
+    width: 165px;
+    padding: 0.6rem 0.6rem 1.2rem 0.6rem;
   }
   .polaroid-frame img {
-    height: 85px;
+    height: 115px;
   }
   .polaroid-tag {
-    font-size: 0.95rem;
+    font-size: 1.15rem;
   }
   .frame-left {
-    left: 4%;
+    left: 2%;
+    transform: rotate(-8deg) translateY(-6px);
   }
   .frame-right {
-    right: 4%;
+    right: 2%;
+    transform: rotate(6deg) translateY(6px);
   }
   .scroll-heart-icon {
     font-size: 1.5rem;
@@ -2291,3 +2431,147 @@ body.unlocked .music-player-widget {
     padding: 0.1rem 0;
   }
 }
+
+/* ---------- 3D Flippable Polaroid Lightbox Modal ---------- */
+.polaroid-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 1.5rem;
+}
+
+.polaroid-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.polaroid-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(134, 78, 90, 0.78);
+  z-index: 1;
+}
+
+.polaroid-modal-wrapper {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 420px;
+}
+
+.polaroid-modal-close {
+  position: absolute;
+  top: -45px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 183, 197, 0.3);
+  font-size: 1.5rem;
+  color: var(--rose-dark);
+  cursor: pointer;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  transition: all 0.3s;
+}
+
+.polaroid-modal-close:hover {
+  transform: scale(1.1) rotate(90deg);
+  background: #FFF;
+  color: var(--rose-primary);
+}
+
+/* 3D Flip Card inside Modal */
+.modal-flip-card {
+  width: min(340px, 90vw);
+  height: 460px;
+  perspective: 1500px;
+  cursor: pointer;
+}
+
+.modal-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-card-front,
+.modal-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  background: #FFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 1rem 1rem 2rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+  border: 8px solid #FFF;
+  outline: 6px solid rgba(255, 255, 255, 0.65);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-card-front {
+  transform: rotateY(0deg) translateZ(1px);
+}
+
+.modal-card-back {
+  transform: rotateY(180deg) translateZ(1px);
+  background: linear-gradient(135deg, #FFFDFB 0%, #FFF5F7 100%);
+}
+
+.modal-photo-frame {
+  background: #EFEFEF;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.8rem;
+  height: 330px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.modal-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-tag-urdu.urdu {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: 1.6rem;
+  line-height: 2.2;
+  font-weight: 600;
+  color: var(--rose-deep);
+  text-shadow: 0 2px 4px rgba(216, 107, 130, 0.22);
+  text-align: center;
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 600px) {
+  .modal-flip-card {
+    height: 390px;
+  }
+  .modal-photo-frame {
+    height: 270px;
+  }
+  .modal-tag-urdu.urdu {
+    font-size: 1.3rem;
+  }
+}
+
+

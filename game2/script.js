@@ -218,8 +218,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const el = document.createElement('div');
       el.className = `candy candy-t-${value}`;
-      el.style.left = `${(col * 100) / boardCols}%`;
-      el.style.top = `${(row * 100) / boardRows}%`;
+      el.style.left = '0';
+      el.style.top = '0';
+      el.style.transform = `translate3d(${col * 100}%, ${row * 100}%, 0)`;
       
       el.innerHTML = `
         <div class="candy-inner">
@@ -251,8 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePosition(row, col) {
       this.row = row;
       this.col = col;
-      this.el.style.left = `${(col * 100) / boardCols}%`;
-      this.el.style.top = `${(row * 100) / boardRows}%`;
+      this.el.style.transform = `translate3d(${col * 100}%, ${row * 100}%, 0)`;
     }
 
     updateValue(value) {
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAudio();
     isPlaying = true;
     score = 0;
-    moves = 30;
+    moves = getMovesForLevel(gameLevel);
     selectedCandy = null;
     isSwappingOrFalling = false;
     endlessMode = false;
@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePowerupUI();
 
     scoreVal.innerText = '0';
-    movesVal.innerText = '30';
+    movesVal.innerText = moves;
 
     candiesContainer.innerHTML = '';
     
@@ -1440,20 +1440,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const SURPRISES = [
     {
-      title: "Memory Card 💖",
-      text: "Of all the memories we share, my favorite ones are the simplest—your laugh when I say something silly, and the quiet comfort of just talking to you. You make the world so much softer and happier. 💕"
+      title: "لاڈلی اور پیاری سی مسکراہٹ کے لیے دعا 🌸",
+      text: "میری پیاری لائبہ، اللہ پاک آپ کے معصوم اور خوبصورت چہرے کی مسکراہٹ کو ہمیشہ سجا کر رکھے۔ آپ کی زندگی میں کبھی کوئی اداسی کا لمحہ نہ آئے، اور آپ کا دل ہمیشہ معصوم خوشیوں سے کھلتا رہے۔ آمین۔ 💖"
     },
     {
-      title: "Birthday Wish 🌸",
-      text: "On your special day, my deepest prayer is for your absolute happiness, good health, and peace of mind. May Allah grant you success in everything you set your heart on and protect your beautiful smile always. 🌸✨"
-    },
-    {
-      title: "Promise Ticket 🍬",
-      text: "This ticket entitles you to my lifetime support. I promise to always be there to listen to your thoughts, comfort you when you are tired, celebrate your wins, and walk beside you through everything. 💖"
-    },
-    {
-      title: "Celebration 🎂",
-      text: "Happy Birthday to the sweetest soul! Today is all about celebrating you and the beautiful light you bring into my life. I hope this little surprise brings a smile to your face. I hope you like it! 🎂🎈"
+      title: "سچی خوشیوں اور پرسکون دل کی دعا 💖",
+      text: "اللہ پاک آپ کو دنیا کی ہر وہ خوشی نصیب کرے جو آپ کی آنکھوں کو چمکائے اور آپ کے دل کو پرسکون کرے۔ وہ آپ کو ہمیشہ اپنی امان میں رکھے اور آپ کی ہر خواہش کو اتنے خوبصورت طریقے سے پورا کرے کہ آپ خوشی سے مسکرا اٹھیں۔ آمین۔ ✨"
     }
   ];
 
@@ -1486,8 +1478,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const data = SURPRISES[idx];
       revealContent.innerHTML = `
-        <h3 style="font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--rose-deep); margin-bottom: 1rem;">${data.title}</h3>
-        <p style="font-family: 'Quicksand', sans-serif; font-size: 1.15rem; font-weight: 500; color: #553b40; line-height: 1.6;">"${data.text}"</p>
+        <h3 class="urdu-title" style="font-family: 'JameelNooriNastaliq', 'Noto Nastaliq Urdu', serif; font-size: 2rem; color: var(--rose-deep); margin-bottom: 0.8rem; direction: rtl; text-align: center;">${data.title}</h3>
+        <p class="urdu-body" style="font-family: 'JameelNooriNastaliq', 'Noto Nastaliq Urdu', serif; font-size: 1.45rem; font-weight: normal; color: #5a2e37; line-height: 2.1; direction: rtl; text-align: center; margin-top: 0.5rem; padding: 0 10px;">${data.text}</p>
       `;
 
       giftRevealModal.classList.remove('hidden');
@@ -1613,6 +1605,9 @@ document.addEventListener('DOMContentLoaded', () => {
     flyer.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
     flyer.style.filter = 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))';
     document.body.appendChild(flyer);
+    
+    // Force a layout reflow immediately so the browser registers the initial position
+    void flyer.offsetWidth;
     
     // Play feedback beep
     playTinyPop();
@@ -1881,6 +1876,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // ——————————————————————————————————————————————————————
   let gameLevel = 1;
   
+  function getMovesForLevel(level) {
+    if (level === 1) return 12;
+    if (level === 2) return 20;
+    return 30; // Level 3
+  }
+  
   // Floating toast notification helper
   function showFloatingToast(text) {
     let toast = document.getElementById('floating-toast');
@@ -1901,6 +1902,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function applyLevelSelection(level, isMidGame = false) {
     gameLevel = level;
+    const maxMoves = getMovesForLevel(level);
+    
+    if (isMidGame || !isPlaying) {
+      moves = maxMoves;
+      movesVal.innerText = endlessMode ? "∞" : moves;
+    }
     
     // 1. Update target score based on level
     if (level === 1) targetScore = 5000;
@@ -1919,7 +1926,7 @@ document.addEventListener('DOMContentLoaded', () => {
       startCardText.innerHTML = `
         Swap adjacent sweet candies to match 3 or more of the same type in a row or column!
         <br>
-        Reach **${targetScore} points** in under **30 moves** to unlock Laiba's magical birthday gift boxes!
+        Reach **${targetScore} points** in under **${maxMoves} moves** to unlock Laiba's magical birthday gift boxes!
       `;
     }
 

@@ -9,7 +9,8 @@
   <meta name="theme-color" content="#FFB7C5">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="/game2/style.css?v=1.0">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/jameel-noori/fonts/jameel-noori-nastaleeq4.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/game2/style.css?v=1.2">
 </head>
 
 <body>
@@ -146,23 +147,15 @@
         Tap each box to open Laiba's birthday surprises
       </p>
 
-      <!-- Grid of 4 Interactive Gift Boxes -->
-      <div class="gifts-grid">
+      <!-- Grid of 2 Interactive Gift Boxes -->
+      <div class="gifts-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 360px; margin: 1.5rem auto;">
         <div class="gift-box-item" id="gift-0" data-opened="false">
           <div class="gift-box-visual">🎁</div>
-          <div class="gift-box-label">Memory Card 💖</div>
+          <div class="gift-box-label">پہلی دعا 🌸</div>
         </div>
         <div class="gift-box-item" id="gift-1" data-opened="false">
           <div class="gift-box-visual">🎁</div>
-          <div class="gift-box-label">Birthday Wish 🌸</div>
-        </div>
-        <div class="gift-box-item" id="gift-2" data-opened="false">
-          <div class="gift-box-visual">🎁</div>
-          <div class="gift-box-label">Promise Ticket 🍬</div>
-        </div>
-        <div class="gift-box-item" id="gift-3" data-opened="false">
-          <div class="gift-box-visual">🎁</div>
-          <div class="gift-box-label">Celebration 🎂</div>
+          <div class="gift-box-label">دوسری دعا 💖</div>
         </div>
       </div>
 

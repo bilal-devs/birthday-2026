@@ -20,7 +20,7 @@
   --sage-light: #ceeacc;
   --cream-parchment: #FFFBF7;
   --soft-charcoal: #4A3E3F;
-  --glass-white: rgba(255, 255, 255, 0.88);
+  --glass-white: rgba(255, 255, 255, 0.95);
   --glass-pink: rgba(255, 209, 220, 0.35);
 
   /* Premium Pink Soft Glow Shadows */
@@ -79,6 +79,8 @@ body.unlocked {
   background-position: center;
   z-index: -1;
   pointer-events: none;
+  /* GPU layer hint to avoid constant background repainting on scroll */
+  transform: translate3d(0, 0, 0);
 }
 
 /* ---------- Magical Interactive Opening Envelope Screen ---------- */
@@ -235,7 +237,6 @@ body.unlocked {
   top: -40px;
   pointer-events: none;
   opacity: 0.85;
-  will-change: transform;
 }
 
 @keyframes petalDrop {
@@ -329,7 +330,6 @@ body.unlocked .navbar {
 
 .hero-card {
   background: var(--glass-white);
-  backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.7);
   box-shadow: var(--shadow-glow);
   border-radius: var(--radius-lg);
@@ -531,8 +531,7 @@ body.unlocked .navbar {
   transform: translateX(-50%) rotate(-3deg);
   width: 85px;
   height: 24px;
-  background: rgba(206, 234, 204, 0.5);
-  backdrop-filter: blur(2px);
+  background: rgba(206, 234, 204, 0.55);
   border-radius: 2px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   z-index: 10;
@@ -543,8 +542,7 @@ body.unlocked .navbar {
   position: absolute;
   width: 82px;
   height: 22px;
-  background: repeating-linear-gradient(45deg, rgba(255, 183, 197, 0.6) 0px, rgba(255, 183, 197, 0.6) 10px, rgba(255, 209, 220, 0.6) 10px, rgba(255, 209, 220, 0.6) 20px);
-  backdrop-filter: blur(1px);
+  background: repeating-linear-gradient(45deg, rgba(255, 183, 197, 0.65) 0px, rgba(255, 183, 197, 0.65) 10px, rgba(255, 209, 220, 0.65) 10px, rgba(255, 209, 220, 0.65) 20px);
   box-shadow: 0 2px 4px rgba(134, 78, 90, 0.08), inset 0 0 3px rgba(255,255,255,0.4);
   z-index: 12;
   /* Beautifully jagged hand-torn left and right edges */
@@ -586,7 +584,6 @@ body.unlocked .navbar {
   max-width: 750px;
   margin: 0 auto;
   background: var(--glass-white);
-  backdrop-filter: blur(15px);
   border-radius: var(--radius-lg);
   padding: clamp(2rem, 6vw, 4.5rem);
   box-shadow: var(--shadow-ambient);
@@ -823,7 +820,6 @@ body.unlocked .music-player-widget {
 
 .music-bubble {
   background: var(--glass-white);
-  backdrop-filter: blur(10px);
   padding: 0.6rem 1.2rem;
   border-radius: var(--radius-full);
   box-shadow: var(--shadow-ambient);
@@ -1083,9 +1079,7 @@ body.unlocked .music-player-widget {
 /* ---------- Premium Glassmorphic Envelope Helper Badge ---------- */
 .envelope-helper-badge {
   margin-top: 2.5rem;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
   padding: 0.6rem 1.8rem;
   border-radius: var(--radius-full);
   border: 1.5px solid rgba(255, 183, 197, 0.4);
@@ -1552,7 +1546,6 @@ body.unlocked .music-player-widget {
   position: fixed;
   pointer-events: none;
   z-index: 99999;
-  will-change: transform, opacity;
   box-shadow: 0 2px 6px rgba(255, 183, 197, 0.15);
 }
 
@@ -1727,7 +1720,6 @@ body.unlocked .music-player-widget {
   margin-top: 2rem;
   padding: 2.2rem 1.5rem;
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
   border-radius: var(--radius-md);
   border: 1.5px solid rgba(255, 183, 197, 0.45);
   box-shadow: 0 12px 30px rgba(255, 183, 197, 0.18);
@@ -1829,8 +1821,7 @@ body.unlocked .music-player-widget {
   position: absolute;
   width: 82px;
   height: 22px;
-  background: repeating-linear-gradient(45deg, rgba(206, 234, 204, 0.6) 0px, rgba(206, 234, 204, 0.6) 10px, rgba(220, 245, 218, 0.6) 10px, rgba(220, 245, 218, 0.6) 20px);
-  backdrop-filter: blur(1px);
+  background: repeating-linear-gradient(45deg, rgba(206, 234, 204, 0.65) 0px, rgba(206, 234, 204, 0.65) 10px, rgba(220, 245, 218, 0.65) 10px, rgba(220, 245, 218, 0.65) 20px);
   z-index: 12;
   top: -10px;
   left: 8%;
@@ -1848,8 +1839,7 @@ body.unlocked .music-player-widget {
   position: absolute;
   width: 82px;
   height: 22px;
-  background: repeating-linear-gradient(45deg, rgba(255, 183, 197, 0.6) 0px, rgba(255, 183, 197, 0.6) 10px, rgba(255, 209, 220, 0.6) 10px, rgba(255, 209, 220, 0.6) 20px);
-  backdrop-filter: blur(1px);
+  background: repeating-linear-gradient(45deg, rgba(255, 183, 197, 0.65) 0px, rgba(255, 183, 197, 0.65) 10px, rgba(255, 209, 220, 0.65) 10px, rgba(255, 209, 220, 0.65) 20px);
   z-index: 12;
   top: -10px;
   left: 76%;
@@ -1935,9 +1925,7 @@ body.unlocked .music-player-widget {
 
 .game-cta-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.95);
   border: 2px dashed rgba(255, 183, 197, 0.35);
   border-radius: var(--radius-lg);
   padding: clamp(2.2rem, 5vw, 3.5rem);

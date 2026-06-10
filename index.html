@@ -22,6 +22,24 @@
 
 <body>
 
+  <!-- Shared SVG Gradients for performance optimization (cached once by the browser) -->
+  <svg style="display: none;">
+    <defs>
+      <linearGradient id="petal-grad-pink" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FFE3E7" />
+        <stop offset="100%" stop-color="#FFB7C5" />
+      </linearGradient>
+      <linearGradient id="petal-grad-peach" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FFE3E7" />
+        <stop offset="100%" stop-color="#FFD1DC" />
+      </linearGradient>
+      <linearGradient id="petal-grad-blush" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FFE3E7" />
+        <stop offset="100%" stop-color="#FCE1CE" />
+      </linearGradient>
+    </defs>
+  </svg>
+
   <!-- Background Textured Paint/Parchment layer -->
   <div class="parchment-bg"></div>
 

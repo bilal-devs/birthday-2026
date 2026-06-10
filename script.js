@@ -117,30 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const randomPath = SVG_PETAL_PATHS[Math.floor(Math.random() * SVG_PETAL_PATHS.length)];
       pathElement.setAttribute("d", randomPath);
 
-      // Create rich, premium inner blossom gradient for high fidelity
-      const defs = document.createElementNS(svgNamespace, "defs");
-      const linearGradient = document.createElementNS(svgNamespace, "linearGradient");
-      const gradId = `petal-grad-${Math.random().toString(36).substr(2, 9)}`;
-      linearGradient.setAttribute("id", gradId);
-      linearGradient.setAttribute("x1", "0%");
-      linearGradient.setAttribute("y1", "0%");
-      linearGradient.setAttribute("x2", "100%");
-      linearGradient.setAttribute("y2", "100%");
-
-      const stop1 = document.createElementNS(svgNamespace, "stop");
-      stop1.setAttribute("offset", "0%");
-      stop1.setAttribute("stop-color", "#FFE3E7");
-
-      const stop2 = document.createElementNS(svgNamespace, "stop");
-      stop2.setAttribute("offset", "100%");
-      // Randomly shade pink, peach, or blush
-      stop2.setAttribute("stop-color", ["#FFB7C5", "#FFD1DC", "#FCE1CE"][Math.floor(Math.random() * 3)]);
-
-      linearGradient.appendChild(stop1);
-      linearGradient.appendChild(stop2);
-      defs.appendChild(linearGradient);
-      svg.appendChild(defs);
-
+      // Reference pre-defined shared gradients for high performance (instead of creating unique gradients per petal)
+      const gradId = ["petal-grad-pink", "petal-grad-peach", "petal-grad-blush"][Math.floor(Math.random() * 3)];
       pathElement.setAttribute("fill", `url(#${gradId})`);
       svg.appendChild(pathElement);
 
@@ -637,8 +615,8 @@ document.addEventListener('DOMContentLoaded', () => {
         createSparkleSplash(clientX, clientY, 2);
       }
 
-      // Throttled pixel percentage check to eliminate jank (at most once every 180ms)
-      if (now - lastPercentCheckTime > 180) {
+      // Throttled pixel percentage check to eliminate jank (at most once every 350ms during drawing)
+      if (now - lastPercentCheckTime > 350) {
         lastPercentCheckTime = now;
         checkScratchPercentage();
       }
@@ -650,14 +628,24 @@ document.addEventListener('DOMContentLoaded', () => {
       scratch(e);
     });
     canvas.addEventListener('mousemove', scratch);
-    window.addEventListener('mouseup', () => isDrawing = false);
+    window.addEventListener('mouseup', () => {
+      if (isDrawing) {
+        isDrawing = false;
+        checkScratchPercentage();
+      }
+    });
 
     canvas.addEventListener('touchstart', (e) => {
       isDrawing = true;
       scratch(e);
     });
     canvas.addEventListener('touchmove', scratch);
-    window.addEventListener('touchend', () => isDrawing = false);
+    window.addEventListener('touchend', () => {
+      if (isDrawing) {
+        isDrawing = false;
+        checkScratchPercentage();
+      }
+    });
 
     // High speed pixel analysis to determine scratched percentage
     function checkScratchPercentage() {

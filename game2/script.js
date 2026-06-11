@@ -1404,7 +1404,9 @@ document.addEventListener('DOMContentLoaded', () => {
       p.style.pointerEvents = 'none';
       p.style.zIndex = 100;
       p.style.fontSize = `${Math.random() * 0.7 + 0.8}rem`;
-      p.style.transition = 'all 0.6s cubic-bezier(0.1, 0.8, 0.3, 1)';
+      p.style.transform = 'translate3d(0, 0, 0) scale(1) rotate(0deg)';
+      p.style.willChange = 'transform, opacity';
+      p.style.transition = 'transform 0.6s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.6s ease-out';
       
       parent.appendChild(p);
       
@@ -1414,9 +1416,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const destY = startY + Math.sin(angle) * distance;
       
       requestAnimationFrame(() => {
-        p.style.left = `${destX}px`;
-        p.style.top = `${destY}px`;
-        p.style.transform = `scale(0) rotate(${Math.random() * 720 - 360}deg)`;
+        const dx = destX - startX;
+        const dy = destY - startY;
+        p.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(0) rotate(${Math.random() * 720 - 360}deg)`;
         p.style.opacity = '0';
       });
       
@@ -1602,7 +1604,9 @@ document.addEventListener('DOMContentLoaded', () => {
     flyer.style.fontSize = '2rem';
     flyer.style.zIndex = '200';
     flyer.style.pointerEvents = 'none';
-    flyer.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    flyer.style.transform = 'translate3d(0, 0, 0) scale(1) rotate(0deg)';
+    flyer.style.willChange = 'transform';
+    flyer.style.transition = 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
     flyer.style.filter = 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))';
     document.body.appendChild(flyer);
     
@@ -1613,9 +1617,9 @@ document.addEventListener('DOMContentLoaded', () => {
     playTinyPop();
     
     requestAnimationFrame(() => {
-      flyer.style.left = `${endRect.left + endRect.width / 2 - 16}px`;
-      flyer.style.top = `${endRect.top + endRect.height / 2 - 16}px`;
-      flyer.style.transform = 'scale(1.5) rotate(360deg)';
+      const dx = (endRect.left + endRect.width / 2 - 16) - startRect.left;
+      const dy = (endRect.top + endRect.height / 2 - 16) - startRect.top;
+      flyer.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(1.5) rotate(360deg)`;
     });
     
     setTimeout(() => {
@@ -2237,7 +2241,9 @@ document.addEventListener('DOMContentLoaded', () => {
       p.style.pointerEvents = 'none';
       p.style.zIndex = 100;
       p.style.fontSize = '0.9rem';
-      p.style.transition = 'all 0.5s cubic-bezier(0.1, 0.8, 0.3, 1)';
+      p.style.transform = 'translate3d(0, 0, 0) scale(1) rotate(0deg)';
+      p.style.willChange = 'transform, opacity';
+      p.style.transition = 'transform 0.5s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.5s ease-out';
       
       parent.appendChild(p);
       
@@ -2247,9 +2253,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const destY = startY + Math.sin(angle) * distance;
       
       requestAnimationFrame(() => {
-        p.style.left = `${destX}px`;
-        p.style.top = `${destY}px`;
-        p.style.transform = `scale(0) rotate(${Math.random() * 360}deg)`;
+        const dx = destX - startX;
+        const dy = destY - startY;
+        p.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(0) rotate(${Math.random() * 360}deg)`;
         p.style.opacity = '0';
       });
       

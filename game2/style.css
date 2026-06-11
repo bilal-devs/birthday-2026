@@ -57,6 +57,10 @@ body, html {
   background-repeat: no-repeat;
   z-index: 1;
   pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .tint-overlay {
@@ -289,6 +293,8 @@ body, html {
   cursor: pointer;
   transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   z-index: 10;
   padding: 2.5px;
 }

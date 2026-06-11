@@ -82,6 +82,9 @@ body.unlocked {
   pointer-events: none;
   /* GPU layer hint to avoid constant background repainting on scroll */
   transform: translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* ---------- Magical Interactive Opening Envelope Screen ---------- */
@@ -98,6 +101,9 @@ body.unlocked {
   justify-content: center;
   transition: opacity 1.2s var(--ease-smooth), visibility 1.2s;
   padding: 1.5rem;
+  will-change: opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .envelope-screen.hidden {
@@ -118,6 +124,9 @@ body.unlocked {
   text-align: center;
   text-shadow: 0 4px 15px rgba(134, 78, 90, 0.08);
   animation: promptPulse 2.5s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 @keyframes promptPulse {
@@ -174,12 +183,15 @@ body.unlocked {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateZ(0);
   width: 95px;
   height: 95px;
   z-index: 10;
   cursor: pointer;
   transition: transform 0.4s var(--ease-spring);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .wax-seal:hover {
@@ -226,6 +238,9 @@ body.unlocked {
   pointer-events: none;
   transition: transform 0.6s, opacity 0.5s;
   animation: sealGlow 2s infinite alternate;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 @keyframes sealGlow {
@@ -244,6 +259,9 @@ body.unlocked {
   opacity: 0.8;
   pointer-events: none;
   animation: sparkleFloat 3s infinite linear;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 @keyframes sparkleFloat {
@@ -266,6 +284,9 @@ body.unlocked {
   top: -40px;
   pointer-events: none;
   opacity: 0.85;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 @keyframes petalDrop {
@@ -960,7 +981,10 @@ body.unlocked .music-player-widget {
 /* ---------- Scroll Reveal Animations ---------- */
 .scroll-reveal {
   opacity: 0;
-  transform: translateY(40px);
+  transform: translateY(40px) translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   transition: opacity 0.9s var(--ease-smooth), transform 0.9s var(--ease-smooth);
 }
 

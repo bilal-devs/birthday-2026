@@ -19,13 +19,13 @@
   <!-- Style links -->
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/jameel-noori/fonts/jameel-noori-nastaleeq4.woff2" as="font"
     type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css?v=4.6">
+  <link rel="stylesheet" href="style.css?v=4.7">
 </head>
 
 <body>
 
   <!-- Shared SVG Gradients for performance optimization (cached once by the browser) -->
-  <svg style="display: none;">
+  <svg style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
     <defs>
       <linearGradient id="petal-grad-pink" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stop-color="#FFE3E7" />
@@ -588,7 +588,7 @@
   </footer>
 
   <!-- Main JavaScript File -->
-  <script src="script.js?v=3.7"></script>
+  <script src="script.js?v=3.8"></script>
 </body>
 
 </html>

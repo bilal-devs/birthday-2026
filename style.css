@@ -89,7 +89,7 @@ body.unlocked {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background-image: linear-gradient(135deg, rgba(255, 251, 247, 0.74), rgba(255, 243, 245, 0.72)), url('assets/laiba-child.jpg');
+  background-image: linear-gradient(135deg, rgba(255, 251, 247, 0.88), rgba(255, 243, 245, 0.85)), url('assets/laiba-child.jpg');
   background-size: cover;
   background-position: center;
   display: flex;

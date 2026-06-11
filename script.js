@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. BACKGROUND MUSIC & AUTOPLAY LOGIC
   // ——————————————————————————————————————————————————————
   const audio = new Audio('./assets/music.mp3');
-  audio.loop = true;
+  audio.loop = false;
   audio.volume = 0.6; // Soft, romantic level
 
   const vinylDisc = document.getElementById('vinyl-disc');
@@ -25,8 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const tutorialBubble = document.getElementById('music-tutorial-bubble');
     if (tutorialBubble) {
       tutorialBubble.classList.remove('show');
+      setTimeout(() => {
+        tutorialBubble.innerText = "You can pause or play music from here 🌸";
+      }, 500);
     }
     if (audio.paused) {
+      if (audio.ended) {
+        audio.currentTime = 0;
+      }
       audio.play().then(() => {
         vinylDisc.classList.add('playing');
         if (musicStatusText) musicStatusText.innerText = "Playing Sweet Melody";
@@ -42,6 +48,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (vinylDisc) {
     vinylDisc.addEventListener('click', toggleMusic);
   }
+
+  // Music ended callback to show play again tooltip
+  audio.addEventListener('ended', () => {
+    if (vinylDisc) vinylDisc.classList.remove('playing');
+    if (musicStatusText) musicStatusText.innerText = "Music Ended";
+
+    const tutorialBubble = document.getElementById('music-tutorial-bubble');
+    if (tutorialBubble) {
+      tutorialBubble.innerText = "You can play the audio again 🌸";
+      tutorialBubble.classList.add('show');
+      setTimeout(() => {
+        if (tutorialBubble.innerText.includes("again")) {
+          tutorialBubble.classList.remove('show');
+        }
+      }, 6000);
+    }
+  });
 
   // Music tutorial bubble click to dismiss
   const tutorialBubble = document.getElementById('music-tutorial-bubble');
@@ -130,11 +153,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createPetal() {
       const svgNamespace = "http://www.w3.org/2000/svg";
-      
+
       // Container div that handles the translateY falling path
       const petalDiv = document.createElement("div");
       petalDiv.classList.add("svg-petal");
-      
+
       const svg = document.createElementNS(svgNamespace, "svg");
       svg.setAttribute("viewBox", "0 0 40 45");
       svg.style.width = "100%";
@@ -304,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function endDrag() {
     if (!isDragging) return;
     isDragging = false;
-    
+
     // Convert drag velocity to momentum spin (capped to avoid excessive speeds)
     rotationSpeed = Math.max(-15, Math.min(15, velocity));
 
@@ -362,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (inner) {
       inner.style.transform = 'rotateY(0deg)';
     }
-    
+
     polaroidModal.classList.add('active');
 
     // Start rotation loop
@@ -1046,68 +1069,68 @@ document.addEventListener('DOMContentLoaded', () => {
   function playRichChime(notes, type = 'sine', duration = 1.6, stagger = 0.08, volume = 0.4) {
     initSynthAudio();
     const now = synthAudioCtx.currentTime;
-    
+
     // Create dreamy stereo-emulated echo delay network
     const delay = synthAudioCtx.createDelay();
     delay.delayTime.value = 0.28; // 280ms echo time
-    
+
     const feedback = synthAudioCtx.createGain();
     feedback.gain.value = 0.35; // 35% echo volume feedback
-    
+
     const filter = synthAudioCtx.createBiquadFilter();
     filter.type = 'lowpass';
     filter.frequency.value = 1800; // soft warmth filter for echo tail
-    
+
     // Feedback loop routing
     delay.connect(feedback);
     feedback.connect(filter);
     filter.connect(delay);
-    
+
     const masterGain = synthAudioCtx.createGain();
     masterGain.gain.setValueAtTime(volume, now);
-    
+
     delay.connect(masterGain);
     masterGain.connect(synthAudioCtx.destination);
-    
+
     notes.forEach((freq, idx) => {
       const noteTime = now + idx * stagger;
-      
+
       // Detuned dual oscillators for rich analog chorused voice
       const osc1 = synthAudioCtx.createOscillator();
       const osc2 = synthAudioCtx.createOscillator();
       // High frequency harmonic oscillator for bell-like music box shimmer
       const oscHarmonic = synthAudioCtx.createOscillator();
-      
+
       const gain = synthAudioCtx.createGain();
-      
+
       osc1.type = type;
       osc2.type = type;
       oscHarmonic.type = 'sine';
-      
+
       osc1.frequency.setValueAtTime(freq, noteTime);
       osc2.frequency.setValueAtTime(freq + 2.5, noteTime); // slightly detuned (+2.5 Hz)
       oscHarmonic.frequency.setValueAtTime(freq * 2, noteTime); // 2nd harmonic (octave above)
-      
+
       gain.gain.setValueAtTime(0.0, noteTime);
       gain.gain.linearRampToValueAtTime(0.18, noteTime + 0.012); // fast attack (12ms)
       gain.gain.exponentialRampToValueAtTime(0.001, noteTime + duration); // smooth decay
-      
+
       osc1.connect(gain);
       osc2.connect(gain);
-      
+
       // Connect high harmonic gain
       const harmonicGain = synthAudioCtx.createGain();
       harmonicGain.gain.setValueAtTime(0.04, noteTime);
       oscHarmonic.connect(harmonicGain);
       harmonicGain.connect(gain);
-      
+
       gain.connect(masterGain);
       gain.connect(delay); // route into delay echo
-      
+
       osc1.start(noteTime);
       osc2.start(noteTime);
       oscHarmonic.start(noteTime);
-      
+
       osc1.stop(noteTime + duration + 0.1);
       osc2.stop(noteTime + duration + 0.1);
       oscHarmonic.stop(noteTime + duration + 0.1);
@@ -1126,21 +1149,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const delay = synthAudioCtx.createDelay();
     delay.delayTime.value = 0.22; // 220ms echo delay for sweet chimes
-    
+
     const feedback = synthAudioCtx.createGain();
     feedback.gain.value = 0.20; // 20% echo feedback for spatial depth without mud
-    
+
     delay.connect(feedback);
     feedback.connect(delay);
-    
+
     const masterGain = synthAudioCtx.createGain();
     masterGain.gain.setValueAtTime(0.4, now); // Sweet volume level
-    
+
     delay.connect(masterGain);
     masterGain.connect(synthAudioCtx.destination);
 
     // High-pitched monophonic music box arrangement (scaled to ~7.5 seconds)
-    const speedFactor = 0.55; 
+    const speedFactor = 0.55;
     const melody = [
       { f: 523.25, t: 0.0, d: 0.4 },   // C5
       { f: 523.25, t: 0.4, d: 0.2 },   // C5
@@ -1172,10 +1195,10 @@ document.addEventListener('DOMContentLoaded', () => {
       { f: 698.46, t: 12.9, d: 1.0 }   // F5
     ];
 
-    melody.forEach(({f, t, d}) => {
+    melody.forEach(({ f, t, d }) => {
       const noteTime = now + (t * speedFactor);
       const duration = d * speedFactor;
-      
+
       const osc = synthAudioCtx.createOscillator();
       const oscOvertone = synthAudioCtx.createOscillator();
       const noteGain = synthAudioCtx.createGain();
@@ -1196,7 +1219,7 @@ document.addEventListener('DOMContentLoaded', () => {
       osc.connect(noteGain);
       oscOvertone.connect(overtoneGain);
       overtoneGain.connect(noteGain);
-      
+
       noteGain.connect(masterGain);
       noteGain.connect(delay);
 
@@ -1211,7 +1234,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (audio && !audio.paused) {
       const originalVolume = audio.volume;
       let vol = originalVolume;
-      
+
       // Fade out BGM
       const fadeOutInterval = setInterval(() => {
         vol -= 0.05;
@@ -1251,14 +1274,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const rect = element.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
-    
+
     // 3 bursts at left-center, right-center, and middle-top
     const bursts = [
       { x: rect.left + width * 0.2, y: rect.top + height * 0.35 },
       { x: rect.left + width * 0.8, y: rect.top + height * 0.25 },
       { x: rect.left + width * 0.5, y: rect.top + height * 0.5 }
     ];
-    
+
     bursts.forEach((pos, idx) => {
       setTimeout(() => {
         createFireworkBurst(pos.x, pos.y);
@@ -1270,11 +1293,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const colors = ['#FFB7C5', '#FFD1DC', '#FFE3E7', '#FCE1CE', '#BAE6FD', '#FDE047', '#C084FC'];
     const emojis = ['✨', '🌸', '💖', '⭐', '🎈', '🎉'];
     const particleCount = 28;
-    
+
     for (let i = 0; i < particleCount; i++) {
       const p = document.createElement('div');
       p.className = 'firework-particle';
-      
+
       const useEmoji = Math.random() > 0.4;
       if (useEmoji) {
         p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
@@ -1286,25 +1309,25 @@ document.addEventListener('DOMContentLoaded', () => {
         p.style.borderRadius = '50%';
         p.style.boxShadow = '0 0 8px rgba(255,183,197,0.5)';
       }
-      
+
       p.style.left = `${x + window.scrollX}px`;
       p.style.top = `${y + window.scrollY}px`;
       p.style.opacity = '1';
       p.style.transform = 'translate(-50%, -50%) scale(0.5)';
-      
+
       document.body.appendChild(p);
-      
+
       // Calculate random explosion angle and distance
       const angle = (Math.PI * 2 * i) / particleCount + (Math.random() * 0.2 - 0.1);
       const distance = Math.random() * 120 + 60;
-      
+
       requestAnimationFrame(() => {
         const destX = Math.cos(angle) * distance;
         const destY = Math.sin(angle) * distance - 25; // float slightly upwards
         p.style.transform = `translate(calc(-50% + ${destX}px), calc(-50% + ${destY}px)) scale(1.1) rotate(${Math.random() * 720 - 360}deg)`;
         p.style.opacity = '0';
       });
-      
+
       setTimeout(() => p.remove(), 1250);
     }
   }
@@ -1312,7 +1335,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function spawnBalloonsCascade(element) {
     if (!element) return;
     const rect = element.getBoundingClientRect();
-    
+
     const count = 16;
     for (let i = 0; i < count; i++) {
       setTimeout(() => {
@@ -1324,16 +1347,16 @@ document.addEventListener('DOMContentLoaded', () => {
         balloon.style.top = `${rect.bottom + window.scrollY}px`;
         balloon.style.opacity = '1';
         balloon.style.transform = 'translate(-50%, 0) scale(0.5)';
-        
+
         document.body.appendChild(balloon);
-        
+
         requestAnimationFrame(() => {
           const driftX = Math.random() * 80 - 40;
           const driftY = -(Math.random() * 150 + 150); // float upwards
           balloon.style.transform = `translate(calc(-50% + ${driftX}px), ${driftY}px) scale(1.2) rotate(${Math.random() * 40 - 20}deg)`;
           balloon.style.opacity = '0';
         });
-        
+
         setTimeout(() => balloon.remove(), 2500);
       }, i * 120);
     }

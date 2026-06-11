@@ -9,7 +9,7 @@
    ======================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = false;
 
   // ——————————————————————————————————————————————————————
   // 1. BACKGROUND MUSIC & AUTOPLAY LOGIC
@@ -177,10 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
       svg.style.height = `${size * 1.1}px`;
       svg.style.left = `${leftPos}vw`;
       svg.style.animation = `petalDrop ${duration}s linear ${delay}s infinite`;
-
-      // Apply initial dynamic wind drift sway
-      const windDrift = (Math.sin(Math.random() * Math.PI) * 15).toFixed(1);
-      svg.style.transform = `translateX(${windDrift}px)`;
 
       petalContainer.appendChild(svg);
     }

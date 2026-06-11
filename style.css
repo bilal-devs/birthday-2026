@@ -1667,24 +1667,8 @@ body.unlocked .music-player-widget {
 }
 
 /* ---------- Reduced Motion ---------- */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-
-  .scroll-reveal {
-    opacity: 1;
-    transform: none;
-  }
-
-  .svg-petal {
-    display: none;
-  }
-}
+/* Note: Reduced motion accessibility is handled in JavaScript.
+   Petal animations and shower effects are always active by design. */
 
 /* ---------- Magical Floating Wish Note & Sky Lanterns ---------- */
 .floating-wish {

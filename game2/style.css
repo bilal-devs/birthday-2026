@@ -580,6 +580,8 @@ body, html {
   font-weight: 700;
   margin-top: 0.6rem;
   color: var(--rose-dark);
+  line-height: 1.6;
+  text-align: center;
 }
 
 .gift-box-item[data-opened="true"] {
@@ -745,6 +747,7 @@ body, html {
   .gift-box-label {
     font-size: 0.95rem;
     margin-top: 0.4rem;
+    line-height: 1.45;
   }
 
   .reveal-card {

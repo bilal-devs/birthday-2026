@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const musicStatusText = document.getElementById('music-status-text');
 
   function toggleMusic() {
+    const tutorialBubble = document.getElementById('music-tutorial-bubble');
+    if (tutorialBubble) {
+      tutorialBubble.classList.remove('show');
+    }
     if (audio.paused) {
       audio.play().then(() => {
         vinylDisc.classList.add('playing');
@@ -37,6 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Interactive vinyl player widget control
   if (vinylDisc) {
     vinylDisc.addEventListener('click', toggleMusic);
+  }
+
+  // Music tutorial bubble click to dismiss
+  const tutorialBubble = document.getElementById('music-tutorial-bubble');
+  if (tutorialBubble) {
+    tutorialBubble.addEventListener('click', () => {
+      tutorialBubble.classList.remove('show');
+    });
   }
   // ——————————————————————————————————————————————————————
   // 2. MAGICAL WAX SEAL ENVELOPE OPENING ACTION
@@ -80,6 +92,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Trigger standard scroll reveal observer
       initScrollReveal();
+
+      // Trigger music tutorial bubble show/hide logic
+      if (tutorialBubble) {
+        setTimeout(() => {
+          tutorialBubble.classList.add('show');
+          setTimeout(() => {
+            tutorialBubble.classList.remove('show');
+          }, 3500);
+        }, 800);
+      }
     }, 1600); // Transition to main page after envelope fully unfolds!
   }
 

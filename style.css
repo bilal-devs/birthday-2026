@@ -871,6 +871,44 @@ body.unlocked .music-player-widget {
   transform: translateX(0) scale(1);
 }
 
+/* Music Tutorial Bubble */
+.music-tutorial-bubble {
+  position: absolute;
+  right: 75px;
+  background: var(--rose-deep);
+  color: #FFF;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 10px 25px rgba(134, 78, 90, 0.35);
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(20px) scale(0.9);
+  transition: opacity 0.5s var(--ease-spring), transform 0.5s var(--ease-spring), visibility 0.5s;
+  z-index: 1000;
+}
+
+.music-tutorial-bubble::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 6px 0 6px 6px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--rose-deep);
+}
+
+.music-tutorial-bubble.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) scale(1);
+}
+
 .music-notes-wave {
   display: flex;
   align-items: flex-end;
@@ -981,6 +1019,14 @@ body.unlocked .music-player-widget {
 .scratch-card-container:hover {
   box-shadow: var(--shadow-glow);
   transform: translateY(-2px);
+}
+
+.scratch-heading {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.6rem;
+  color: var(--rose-dark);
+  margin-bottom: 1.2rem;
+  line-height: 1.25;
 }
 
 .scratch-prompt {
@@ -1569,6 +1615,24 @@ body.unlocked .music-player-widget {
 
   .music-notes-wave {
     height: 12px;
+  }
+
+  .music-tutorial-bubble {
+    right: 60px;
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .scratch-heading {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .scratch-prompt {
+    font-size: 1.3rem;
+    line-height: 1.4;
+    margin-bottom: 1.2rem;
   }
 
   /* Floral corner accent sizes */

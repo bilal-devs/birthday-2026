@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (tutorialBubble) {
       tutorialBubble.classList.remove('show');
       setTimeout(() => {
-        tutorialBubble.innerText = "You can pause or play music from here 🌸";
-      }, 500);
+        tutorialBubble.innerText = "You can pause or play audio message from here 🌸";
+      }, 600);
     }
     if (audio.paused) {
       if (audio.ended) {
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       audio.pause();
       vinylDisc.classList.remove('playing');
-      if (musicStatusText) musicStatusText.innerText = "Music Paused";
+      if (musicStatusText) musicStatusText.innerText = "Audio Message Paused";
     }
   }
 
@@ -52,11 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Music ended callback to show play again tooltip
   audio.addEventListener('ended', () => {
     if (vinylDisc) vinylDisc.classList.remove('playing');
-    if (musicStatusText) musicStatusText.innerText = "Music Ended";
+    if (musicStatusText) musicStatusText.innerText = "Audio Message Ended";
 
     const tutorialBubble = document.getElementById('music-tutorial-bubble');
     if (tutorialBubble) {
-      tutorialBubble.innerText = "You can play the audio again 🌸";
+      tutorialBubble.innerText = "You can play the audio message again 🌸";
       tutorialBubble.classList.add('show');
       setTimeout(() => {
         if (tutorialBubble.innerText.includes("again")) {
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const petalContainer = document.getElementById('petal-container');
     if (!petalContainer) return;
 
-    const PETAL_COUNT = 48;
+    const PETAL_COUNT = 24;
 
     // Beautiful SVG Petal shapes (curved, realistic)
     const SVG_PETAL_PATHS = [
@@ -153,71 +153,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createPetal() {
       const svgNamespace = "http://www.w3.org/2000/svg";
-
-      // Container div that handles the translateY falling path
-      const petalDiv = document.createElement("div");
-      petalDiv.classList.add("svg-petal");
-
       const svg = document.createElementNS(svgNamespace, "svg");
       svg.setAttribute("viewBox", "0 0 40 45");
-      svg.style.width = "100%";
-      svg.style.height = "100%";
+      svg.classList.add("svg-petal");
 
+      // Randomize custom soft-gradient pink petals
+      const pathElement = document.createElementNS(svgNamespace, "path");
+      const randomPath = SVG_PETAL_PATHS[Math.floor(Math.random() * SVG_PETAL_PATHS.length)];
+      pathElement.setAttribute("d", randomPath);
+
+      // Reference pre-defined shared gradients for high performance (instead of creating unique gradients per petal)
       const gradId = ["petal-grad-pink", "petal-grad-peach", "petal-grad-blush"][Math.floor(Math.random() * 3)];
-      const isFlower = Math.random() < 0.45; // 45% full 5-petal flowers, 55% single petals
-
-      if (isFlower) {
-        // Create a beautiful rotated 5-petal cherry blossom flower
-        const group = document.createElementNS(svgNamespace, "g");
-        for (let angle = 0; angle < 360; angle += 72) {
-          const path = document.createElementNS(svgNamespace, "path");
-          // Heart-shaped vector petal extending from center (20, 22.5)
-          path.setAttribute("d", "M20,22.5 C24,12.5 26,12.5 20,4 C14,12.5 16,12.5 20,22.5");
-          path.setAttribute("fill", `url(#${gradId})`);
-          path.setAttribute("transform", `rotate(${angle}, 20, 22.5)`);
-          group.appendChild(path);
-        }
-        // Golden core at the flower's center
-        const core = document.createElementNS(svgNamespace, "circle");
-        core.setAttribute("cx", "20");
-        core.setAttribute("cy", "22.5");
-        core.setAttribute("r", "2.8");
-        core.setAttribute("fill", "#FCD68A");
-        group.appendChild(core);
-        svg.appendChild(group);
-      } else {
-        // Single programmatic falling petal
-        const pathElement = document.createElementNS(svgNamespace, "path");
-        const randomPath = SVG_PETAL_PATHS[Math.floor(Math.random() * SVG_PETAL_PATHS.length)];
-        pathElement.setAttribute("d", randomPath);
-        pathElement.setAttribute("fill", `url(#${gradId})`);
-        svg.appendChild(pathElement);
-      }
-
-      petalDiv.appendChild(svg);
+      pathElement.setAttribute("fill", `url(#${gradId})`);
+      svg.appendChild(pathElement);
 
       // Configure random drop characteristics
-      const size = isFlower ? (Math.random() * 12 + 18) : (Math.random() * 14 + 12); // Flowers: 18-30px, Petals: 12-26px
+      const size = Math.random() * 20 + 15; // 15px to 35px
       const leftPos = Math.random() * 100; // 0% to 100% viewport width
-      const duration = Math.random() * 8 + 8; // 8s to 16s (highly dynamic falling speeds)
-      const delay = Math.random() * -20; // Pre-populate screen
+      const duration = Math.random() * 12 + 10; // 10s to 22s
+      const delay = Math.random() * -20; // Negative delay so they start immediately distributed
 
-      petalDiv.style.width = `${size}px`;
-      petalDiv.style.height = `${size * 1.1}px`;
-      petalDiv.style.left = `${leftPos}vw`;
-      petalDiv.style.animation = `petalDrop ${duration}s linear ${delay}s infinite`;
-
-      // Assign a secondary independent rotation and spin animation to the inner SVG
-      const spinDuration = Math.random() * 4 + 4; // 4s to 8s rotation cycle
-      const spinDirection = Math.random() < 0.5 ? "normal" : "reverse";
-      svg.style.transform = `rotate(${Math.random() * 360}deg)`;
-      svg.style.animation = `petalSpin ${spinDuration}s linear infinite ${spinDirection}`;
+      svg.style.width = `${size}px`;
+      svg.style.height = `${size * 1.1}px`;
+      svg.style.left = `${leftPos}vw`;
+      svg.style.animation = `petalDrop ${duration}s linear ${delay}s infinite`;
 
       // Apply initial dynamic wind drift sway
       const windDrift = (Math.sin(Math.random() * Math.PI) * 15).toFixed(1);
-      petalDiv.style.transform = `translateX(${windDrift}px)`;
+      svg.style.transform = `translateX(${windDrift}px)`;
 
-      petalContainer.appendChild(petalDiv);
+      petalContainer.appendChild(svg);
     }
 
     for (let i = 0; i < PETAL_COUNT; i++) {

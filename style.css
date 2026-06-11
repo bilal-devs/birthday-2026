@@ -74,7 +74,7 @@ body.unlocked {
     radial-gradient(circle at 10% 20%, rgba(255, 183, 197, 0.06) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(252, 225, 206, 0.08) 0%, transparent 45%),
     radial-gradient(circle at 50% 50%, rgba(206, 234, 204, 0.04) 0%, transparent 60%),
-    linear-gradient(rgba(255, 251, 247, 0.945), rgba(255, 251, 247, 0.945)),
+    linear-gradient(rgba(255, 251, 247, 0.90), rgba(255, 251, 247, 0.90)),
     url('assets/laiba-child.jpg');
   background-size: auto, auto, auto, cover, cover;
   background-position: center;

@@ -74,7 +74,7 @@ body.unlocked {
     radial-gradient(circle at 10% 20%, rgba(255, 183, 197, 0.06) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(252, 225, 206, 0.08) 0%, transparent 45%),
     radial-gradient(circle at 50% 50%, rgba(206, 234, 204, 0.04) 0%, transparent 60%),
-    linear-gradient(rgba(255, 251, 247, 0.90), rgba(255, 251, 247, 0.90)),
+    linear-gradient(rgba(255, 251, 247, 0.945), rgba(255, 251, 247, 0.945)),
     url('assets/laiba-child.jpg');
   background-size: auto, auto, auto, cover, cover;
   background-position: center;
@@ -279,6 +279,11 @@ body.unlocked {
     transform: translateY(105vh) rotate(540deg) translateX(120px);
     opacity: 0;
   }
+}
+
+@keyframes petalSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* ---------- Premium Navigation ---------- */
@@ -1025,7 +1030,7 @@ body.unlocked .music-player-widget {
   font-family: 'Dancing Script', cursive;
   font-size: 2.6rem;
   color: var(--rose-dark);
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.8rem;
   line-height: 1.25;
 }
 
@@ -1625,14 +1630,14 @@ body.unlocked .music-player-widget {
 
   .scratch-heading {
     font-size: 2rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1.4rem;
     line-height: 1.3;
   }
 
   .scratch-prompt {
     font-size: 1.3rem;
     line-height: 1.4;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
   }
 
   /* Floral corner accent sizes */

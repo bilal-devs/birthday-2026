@@ -366,14 +366,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (polaroidLeft) {
     polaroidLeft.addEventListener('click', (e) => {
       e.stopPropagation(); // Stop parent scrapbook card from flipping
-      open3DModal('assets/eye1.jpeg', 'assets/flower_bouquet_vintage.png', 'آپ کی آنکھیں 👀', e);
+      open3DModal('assets/eye1.png', 'assets/flower_bouquet_vintage.png', 'آپ کی آنکھیں 👀', e);
     });
   }
 
   if (polaroidRight) {
     polaroidRight.addEventListener('click', (e) => {
       e.stopPropagation(); // Stop parent scrapbook card from flipping
-      open3DModal('assets/eye2.jpeg', 'assets/floral_scrapbook_blossoms.png', 'آپ کی نظریں 💖', e);
+      open3DModal('assets/eye2.png', 'assets/floral_scrapbook_blossoms.png', 'آپ کی نظریں 💖', e);
     });
   }
 

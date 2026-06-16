@@ -543,7 +543,6 @@ body.unlocked .navbar {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  mix-blend-mode: multiply; /* Blends the white background of the illustrations away completely! */
 }
 
 .polaroid-caption {
@@ -961,8 +960,7 @@ body.unlocked .music-player-widget {
   transition: all 0.8s var(--ease-spring);
   pointer-events: none;
   z-index: 1;
-  mix-blend-mode: multiply; /* Blends white background away completely! */
-  /* GPU acceleration for blend mode layers to avoid scroll paint lag */
+  /* GPU acceleration for animated layers */
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
@@ -1005,8 +1003,7 @@ body.unlocked .music-player-widget {
   height: auto;
   filter: drop-shadow(0 6px 15px rgba(255, 183, 197, 0.25));
   animation: float 4s ease-in-out infinite alternate;
-  mix-blend-mode: multiply; /* Blends white background away completely! */
-  /* GPU acceleration for blended/animated element */
+  /* GPU acceleration for animated element */
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
@@ -1020,10 +1017,8 @@ body.unlocked .music-player-widget {
   margin: 1.8rem auto; /* Tightened spacing for visual cohesion */
   opacity: 0.75; /* Softer visual presence */
   display: block;
-  filter: drop-shadow(0 2px 8px rgba(255, 183, 197, 0.12));
   transition: transform 0.6s var(--ease-spring);
-  mix-blend-mode: multiply; /* Blends white background away completely! */
-  /* GPU acceleration for blended element */
+  /* GPU acceleration for smooth scaling on hover */
   transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;

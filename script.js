@@ -773,7 +773,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       ctx.fillStyle = '#6b3743';
       ctx.font = 'italic 14px Quicksand, sans-serif';
-      ctx.fillText('Reveal a special promise...', canvas.width / 2, canvas.height / 2 + 15);
+      ctx.fillText('Reveal a special blessing...', canvas.width / 2, canvas.height / 2 + 15);
     }
 
     // Initialize/resize canvas sizing on open

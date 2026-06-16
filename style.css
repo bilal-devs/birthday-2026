@@ -80,11 +80,6 @@ body.unlocked {
   background-position: center;
   z-index: -1;
   pointer-events: none;
-  /* GPU layer hint to avoid constant background repainting on scroll */
-  transform: translate3d(0, 0, 0);
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 /* ---------- Magical Interactive Opening Envelope Screen ---------- */
@@ -967,6 +962,11 @@ body.unlocked .music-player-widget {
   pointer-events: none;
   z-index: 1;
   mix-blend-mode: multiply; /* Blends white background away completely! */
+  /* GPU acceleration for blend mode layers to avoid scroll paint lag */
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .bloom-accent.top-right { top: 0; right: 0; }
@@ -982,7 +982,6 @@ body.unlocked .music-player-widget {
 .scroll-reveal {
   opacity: 0;
   transform: translateY(40px) translateZ(0);
-  will-change: transform, opacity;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transition: opacity 0.9s var(--ease-smooth), transform 0.9s var(--ease-smooth);
@@ -1007,6 +1006,11 @@ body.unlocked .music-player-widget {
   filter: drop-shadow(0 6px 15px rgba(255, 183, 197, 0.25));
   animation: float 4s ease-in-out infinite alternate;
   mix-blend-mode: multiply; /* Blends white background away completely! */
+  /* GPU acceleration for blended/animated element */
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* ---------- Horizontal Garland Divider ---------- */
@@ -1019,6 +1023,10 @@ body.unlocked .music-player-widget {
   filter: drop-shadow(0 2px 8px rgba(255, 183, 197, 0.12));
   transition: transform 0.6s var(--ease-spring);
   mix-blend-mode: multiply; /* Blends white background away completely! */
+  /* GPU acceleration for blended element */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .garland-divider:hover {

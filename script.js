@@ -157,34 +157,15 @@ document.addEventListener('DOMContentLoaded', () => {
       svg.setAttribute("viewBox", "0 0 40 45");
       svg.classList.add("svg-petal");
 
-      // Create inline gradient per petal for bulletproof rendering
-      const defs = document.createElementNS(svgNamespace, "defs");
-      const linearGradient = document.createElementNS(svgNamespace, "linearGradient");
-      const gradId = `pg-${Math.random().toString(36).substr(2, 6)}`;
-      linearGradient.setAttribute("id", gradId);
-      linearGradient.setAttribute("x1", "0%");
-      linearGradient.setAttribute("y1", "0%");
-      linearGradient.setAttribute("x2", "100%");
-      linearGradient.setAttribute("y2", "100%");
-
-      const stop1 = document.createElementNS(svgNamespace, "stop");
-      stop1.setAttribute("offset", "0%");
-      stop1.setAttribute("stop-color", "#FFE3E7");
-
-      const stop2 = document.createElementNS(svgNamespace, "stop");
-      stop2.setAttribute("offset", "100%");
-      stop2.setAttribute("stop-color", ["#FFB7C5", "#FFD1DC", "#FCE1CE"][Math.floor(Math.random() * 3)]);
-
-      linearGradient.appendChild(stop1);
-      linearGradient.appendChild(stop2);
-      defs.appendChild(linearGradient);
-      svg.appendChild(defs);
+      // Use pre-defined shared gradients from index.html for maximum rendering performance
+      const gradIds = ["petal-grad-pink", "petal-grad-peach", "petal-grad-blush"];
+      const randomGradId = gradIds[Math.floor(Math.random() * gradIds.length)];
 
       // Create the curved petal path shape
       const pathElement = document.createElementNS(svgNamespace, "path");
       const randomPath = SVG_PETAL_PATHS[Math.floor(Math.random() * SVG_PETAL_PATHS.length)];
       pathElement.setAttribute("d", randomPath);
-      pathElement.setAttribute("fill", `url(#${gradId})`);
+      pathElement.setAttribute("fill", `url(#${randomGradId})`);
       svg.appendChild(pathElement);
 
       // Configure random drop characteristics

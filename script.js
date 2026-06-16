@@ -105,6 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       if (envelopeScreen) {
         envelopeScreen.classList.add('hidden');
+        // Completely disable rendering and animations of the screen after it fades out
+        setTimeout(() => {
+          envelopeScreen.style.display = 'none';
+        }, 1250);
       }
       document.body.classList.add('unlocked');
 
@@ -152,21 +156,19 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     function createPetal() {
-      const svgNamespace = "http://www.w3.org/2000/svg";
-      const svg = document.createElementNS(svgNamespace, "svg");
-      svg.setAttribute("viewBox", "0 0 40 45");
-      svg.classList.add("svg-petal");
+      const petal = document.createElement("div");
+      petal.classList.add("svg-petal");
 
-      // Use pre-defined shared gradients from index.html for maximum rendering performance
-      const gradIds = ["petal-grad-pink", "petal-grad-peach", "petal-grad-blush"];
-      const randomGradId = gradIds[Math.floor(Math.random() * gradIds.length)];
+      // Set petal shape using border-radius (classic cherry blossom style)
+      petal.style.borderRadius = "50% 0 50% 50%";
 
-      // Create the curved petal path shape
-      const pathElement = document.createElementNS(svgNamespace, "path");
-      const randomPath = SVG_PETAL_PATHS[Math.floor(Math.random() * SVG_PETAL_PATHS.length)];
-      pathElement.setAttribute("d", randomPath);
-      pathElement.setAttribute("fill", `url(#${randomGradId})`);
-      svg.appendChild(pathElement);
+      // Choose a beautiful linear gradient representing pink, peach, or blush
+      const gradients = [
+        "linear-gradient(135deg, #FFE3E7 0%, #FFB7C5 100%)",
+        "linear-gradient(135deg, #FFE3E7 0%, #FFD1DC 100%)",
+        "linear-gradient(135deg, #FFE3E7 0%, #FCE1CE 100%)"
+      ];
+      petal.style.background = gradients[Math.floor(Math.random() * gradients.length)];
 
       // Configure random drop characteristics
       const size = Math.random() * 20 + 15; // 15px to 35px
@@ -174,12 +176,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const duration = Math.random() * 12 + 10; // 10s to 22s
       const delay = Math.random() * -20; // Negative delay so they start immediately distributed
 
-      svg.style.width = `${size}px`;
-      svg.style.height = `${size * 1.1}px`;
-      svg.style.left = `${leftPos}vw`;
-      svg.style.animation = `petalDrop ${duration}s linear ${delay}s infinite`;
+      petal.style.width = `${size}px`;
+      petal.style.height = `${size * 1.1}px`;
+      petal.style.left = `${leftPos}vw`;
+      petal.style.animation = `petalDrop ${duration}s linear ${delay}s infinite`;
 
-      petalContainer.appendChild(svg);
+      petalContainer.appendChild(petal);
     }
 
     for (let i = 0; i < PETAL_COUNT; i++) {
